@@ -1,25 +1,28 @@
 #!/usr/local/bin/WolframScript -script
 
+Print[ToString[$CommandLine[[4]]]];
+
 CSV = "surface_flow_00" <> ToString[$CommandLine[[4]]] <> ".csv";
 DAT = "flow_00" <> ToString[$CommandLine[[4]]] <> ".dat";
 PNG = "Square_Cylinder" <> ToString[$CommandLine[[4]]] <> ".png";
+
+SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder"];
 
 xmin = -2;
 xmax = 6;
 ymin = -2;
 ymax = 2;
-jet[u_?NumericQ] := 
- Blend[{{0, RGBColor[0, 0, 9/16]}, {1/9, Blue}, {23/63, Cyan}, {13/21,
-      Yellow}, {47/63, Orange}, {55/63, Red}, {1, 
-     RGBColor[1/2, 0, 0]}}, u] /; 0 <= u <= 1
-SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder"];
-data = Import[CSV];
+zmax = 20;
+colfunc = ColorData["ThermometerColors"][#/zmax] &;
+leg = BarLegend[{colfunc, {0, zmax}}, LegendLabel -> "Velocity (m/s)"];
+
+data = Import["surface_flow_00019.csv"];
 shapedata = data[[2 ;; -1, {2, 3}]];
 shape = Graphics[{Gray, Polygon[shapedata]}];
 datafile = 
-  ReadList[Export[".dat", Import[DAT][[4 ;; -1]]], 
+  ReadList[Export[".dat", Import["flow_00019.dat"][[4 ;; -1]]], 
    Number, RecordLists -> True, RecordSeparators -> {"\n"}];
-DeleteFile[".dat"]
+DeleteFile[".dat"];
 Do[If[Dimensions[datafile[[i]]][[1]] == 
     4, {CleanData = datafile[[1 ;; i - 1]], Break[]}], {i, 1, 
    Dimensions[datafile][[1]]}];
@@ -27,8 +30,7 @@ Test = CleanData[[All, 1 ;; 6]];
 
 stream = {};
 Velocity = {};
-Do[{
-  If[Test[[i, 1]] > xmin && Test[[i, 1]] < xmax && 
+Do[{If[Test[[i, 1]] > xmin && Test[[i, 1]] < xmax && 
     Test[[i, 2]] > ymin && Test[[i, 2]] < ymax, 
    AppendTo[
     stream, {{Test[[i, 1]], Test[[i, 2]]}, {Test[[i, 4]]/Test[[i, 3]],
@@ -36,17 +38,14 @@ Do[{
   AppendTo[
    Velocity, {Test[[i, 1]], Test[[i, 2]], 
     Sqrt[(Test[[i, 4]]/Test[[i, 3]])^2 + (Test[[i, 5]]/
-      Test[[i, 3]])^2]}]}, {i, 1, Length[Test]}]
+         Test[[i, 3]])^2]}]}, {i, 1, Length[Test]}]
 
 velplot = 
-  ListDensityPlot[Velocity, ColorFunction -> jet, 
-   PlotRange -> {{xmin, xmax}, {ymin, ymax}, {0, 60}}, 
-   AspectRatio -> Automatic, 
-   PlotLegends -> 
-    BarLegend[Automatic, LegendLabel -> "Velocity (m/s)", 
-     LabelStyle -> {FontFamily -> "Times"}], FrameLabel -> {"x", "y"},
-    PlotLabel -> "Square Cylinder", ImageSize -> Full];
+  ListDensityPlot[Velocity, ColorFunction -> colfunc, 
+   PlotRange -> {{xmin, xmax}, {ymin, ymax}, {0, zmax}}, 
+   AspectRatio -> Automatic, PlotLegends -> leg, 
+   ColorFunctionScaling -> False, FrameLabel -> {"x", "y"}, 
+   PlotLabel -> "Square Cylinder", ImageSize -> Full];
 
-VelocityFull = Show[velplot, shape];
-
-Export[PNG, VelocityFull]
+SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder/Movie"];
+Export[PNG, Show[velplot, shape]]
