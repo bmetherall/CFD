@@ -16,11 +16,11 @@ zmax = 20;
 colfunc = ColorData["ThermometerColors"][#/zmax] &;
 leg = BarLegend[{colfunc, {0, zmax}}, LegendLabel -> "Velocity (m/s)"];
 
-data = Import["surface_flow_00019.csv"];
+data = Import[CSV];
 shapedata = data[[2 ;; -1, {2, 3}]];
 shape = Graphics[{Gray, Polygon[shapedata]}];
 datafile = 
-  ReadList[Export[".dat", Import["flow_00019.dat"][[4 ;; -1]]], 
+  ReadList[Export[".dat", Import[DAT][[4 ;; -1]]], 
    Number, RecordLists -> True, RecordSeparators -> {"\n"}];
 DeleteFile[".dat"];
 Do[If[Dimensions[datafile[[i]]][[1]] == 
