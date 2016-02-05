@@ -1,3 +1,9 @@
+#!/usr/local/bin/WolframScript -script
+
+CSV = "surface_flow_00" <> ToString[$CommandLine[[4]]] <> ".csv";
+DAT = "flow_00" <> ToString[$CommandLine[[4]]] <> ".dat";
+PNG = "Square_Cylinder" <> ToString[$CommandLine[[4]]] <> ".png";
+
 xmin = -2;
 xmax = 6;
 ymin = -2;
@@ -7,11 +13,11 @@ jet[u_?NumericQ] :=
       Yellow}, {47/63, Orange}, {55/63, Red}, {1, 
      RGBColor[1/2, 0, 0]}}, u] /; 0 <= u <= 1
 SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder"];
-data = Import["surface_flow_00003.csv"];
+data = Import[CSV];
 shapedata = data[[2 ;; -1, {2, 3}]];
 shape = Graphics[{Gray, Polygon[shapedata]}];
 datafile = 
-  ReadList[Export[".dat", Import["flow_00003.dat"][[4 ;; -1]]], 
+  ReadList[Export[".dat", Import[DAT][[4 ;; -1]]], 
    Number, RecordLists -> True, RecordSeparators -> {"\n"}];
 DeleteFile[".dat"]
 Do[If[Dimensions[datafile[[i]]][[1]] == 
@@ -43,4 +49,4 @@ velplot =
 
 VelocityFull = Show[velplot, shape];
 
-Export["Square_Cylinder03.png", VelocityFull]
+Export[PNG, VelocityFull]
