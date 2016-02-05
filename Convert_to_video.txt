@@ -1,0 +1,9 @@
+#Command for converting the .pngs to an mp4 video
+
+ffmpeg -f image2 -r 6 -i 'img%02d.png' output.mp4
+
+#Following '-r' is the frame rate
+
+#Following '-i' is the file name pattern
+#'%02d' means numbers padded by 2 zeros. ie %03d translates to 001 .. 002 .. 999
+
