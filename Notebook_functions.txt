@@ -6,7 +6,7 @@ jet[u_?NumericQ] :=
  Blend[{{0, RGBColor[0, 0, 9/16]}, {1/9, Blue}, {23/63, Cyan}, {13/21,
       Yellow}, {47/63, Orange}, {55/63, Red}, {1, 
      RGBColor[1/2, 0, 0]}}, u] /; 0 <= u <= 1
-SetDirectory["/home/brady/SU2/Results/Square_Cylinder"];
+SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder"];
 data = Import["surface_flow_00008.csv"];
 shapedata = data[[2 ;; -1, {2, 3}]];
 shape = Graphics[{Gray, Polygon[shapedata]}];
@@ -40,7 +40,7 @@ velplot =
   PlotLegends -> 
    BarLegend[Automatic, LegendLabel -> "Velocity (m/s)", 
     LabelStyle -> {FontFamily -> "Times"}], FrameLabel -> {"x", "y"}, 
-  PlotLabel -> "Square Cylinder", ImageSize -> Full]1
+  PlotLabel -> "Square Cylinder", ImageSize -> Full]
 
 
 streamplot = 
@@ -51,4 +51,4 @@ streamplot =
 
 VelocityFull = Show[velplot, shape]
 
-Export["Square_Cylinder08.pdf", VelocityFull]
+Export["Square_Cylinder08.png", VelocityFull]
