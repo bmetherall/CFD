@@ -13,7 +13,7 @@ xmax = 6;
 ymin = -2;
 ymax = 2;
 zmax = 20;
-colfunc = ColorData["ThermometerColors"][#/zmax] &;
+colfunc = ColorData["SunsetColors"][#/zmax] &;
 leg = BarLegend[{colfunc, {0, zmax}}, LegendLabel -> "Velocity (m/s)"];
 
 data = Import[CSV];
@@ -30,22 +30,19 @@ Test = CleanData[[All, 1 ;; 6]];
 
 stream = {};
 Velocity = {};
-Do[{If[Test[[i, 1]] > xmin && Test[[i, 1]] < xmax && 
-    Test[[i, 2]] > ymin && Test[[i, 2]] < ymax, 
-   AppendTo[
-    stream, {{Test[[i, 1]], Test[[i, 2]]}, {Test[[i, 4]]/Test[[i, 3]],
-       Test[[i, 5]]/Test[[i, 3]]}}]];
+Do[
   AppendTo[
    Velocity, {Test[[i, 1]], Test[[i, 2]], 
     Sqrt[(Test[[i, 4]]/Test[[i, 3]])^2 + (Test[[i, 5]]/
-         Test[[i, 3]])^2]}]}, {i, 1, Length[Test]}]
+         Test[[i, 3]])^2]}], {i, 1, Length[Test]}]
 
 velplot = 
   ListDensityPlot[Velocity, ColorFunction -> colfunc, 
    PlotRange -> {{xmin, xmax}, {ymin, ymax}, {0, zmax}}, 
    AspectRatio -> Automatic, PlotLegends -> leg, 
    ColorFunctionScaling -> False, FrameLabel -> {"x", "y"}, 
-   PlotLabel -> "Square Cylinder", ImageSize -> Full];
+   PlotLabel -> 
+ Style["Static Square Cylinder (Re = 250)", FontSize -> 18, Black], ImageSize -> Full];
 
-SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder/Movie"];
+SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder/Movies"];
 Export[PNG, Show[velplot, shape]]
