@@ -1,0 +1,3 @@
+Turbulent
+No restart
+50 frames 25 iterations each
