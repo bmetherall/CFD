@@ -2,8 +2,8 @@
 
 Print[ToString[$CommandLine[[4]]]];
 
-CSV = "surface_flow_00" <> ToString[$CommandLine[[4]]] <> ".csv";
-DAT = "flow_00" <> ToString[$CommandLine[[4]]] <> ".dat";
+CSV = "surface_flow_0" <> ToString[$CommandLine[[4]]] <> ".csv";
+DAT = "flow_0" <> ToString[$CommandLine[[4]]] <> ".dat";
 PNG = "Square_Cylinder" <> ToString[$CommandLine[[4]]] <> ".png";
 
 SetDirectory["/home/brady/SU2/CFD/Results/Square_Cylinder"];
