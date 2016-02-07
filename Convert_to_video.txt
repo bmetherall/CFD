@@ -5,5 +5,7 @@ ffmpeg -f image2 -r 6 -i 'img%02d.png' output.mp4
 #Following '-r' is the frame rate
 
 #Following '-i' is the file name pattern
-#'%02d' means numbers padded by 2 zeros. ie %03d translates to 001 .. 002 .. 999
+#'%03d' means numbers padded by 3 zeros. ie %03d translates to 001 .. 002 .. 999
+
+ffmpeg -f image2 -r 12 -i 'Square_Cylinder%03d.png' Test.mp4
 
