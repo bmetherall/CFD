@@ -1,0 +1,109 @@
+\documentclass[10pt]{article}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{amsfonts}
+\usepackage{xcolor,graphicx}
+\usepackage{geometry}
+\usepackage{animate}
+\usepackage{listings}
+
+
+%http://mathematica.stackexchange.com/questions/42793/highlighting-mathematica-code-in-latex-document
+
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{graphgray}{gray}{0.7}
+\definecolor{blue}{rgb}{0,0,1}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{purple}{rgb}{0.5,0,0.5}
+
+% define a custom mathematica language for syntax highlighting
+\lstdefinelanguage{myMMA}{
+keywords={SetDirectory, ColorData, BarLegend, LegendLabel, Graphics, Gray, Polygon, Import, Do, If, Dimensions, Break, AppendTo, Sqrt, All, Length, ListDensityPlot, ColorFunction, PlotRange, AspectRatio, PlotLegends, ColorFunctionScaling, FrameLabel, PlotLabel, Style, FontSize, Black, ImageSize, Full, Show, Automatic, False, LegendMarkerSize},
+keywords=[2]{i},
+keywordstyle=\color{black},
+keywordstyle=[2]\color{mygreen},
+commentstyle=\color{gray}, 
+stringstyle=\color{purple},
+identifierstyle=\color{blue},
+sensitive=false,
+comment=[l]{(*},
+morecomment=[s]{/*}{*/},
+morestring=[b]',
+morestring=[b]",
+breaklines=true,
+captionpos=b,
+numbers=left
+}
+
+
+\title{Computational Fluid Dynamics}
+\author{Brady Metherall \and 100516905}
+\date{Monday April 4, 2016}
+
+\begin{document}
+\newgeometry{margin=1in}
+\maketitle
+\setlength\parindent{0pt}
+\lstset{language=myMMA}
+
+\section{Introduction}
+
+\begin{figure}[h]
+\label{airfoilanimation}
+\centering
+\animategraphics[label=airfoil, loop, width = 0.5\linewidth, autoplay]{12}{Airfoil_Animation/Square_Cylinder}{0021}{0044}
+\caption{Look at how neat that is!}
+\end{figure}
+
+\section{Theory}
+
+Figure \ref{airfoilanimation} is neat.
+
+\section{SU2}
+
+\subsection{Mesh}
+
+\section{Code}
+
+\begin{lstlisting}[breaklines=true, label=code, caption={This is my caption.}]
+(*Change the current directory to where the files are*)
+SetDirectory['/home/brady/SU2/CFD/Results/Square_Cylinder'];
+
+(*Set the plot limits*)
+xmin = -2;
+xmax = 6;
+ymin = -2;
+ymax = 2;
+zmax = 20;
+
+(*Set the colour function as well as the legend style*)
+colfunc = ColorData['SunsetColors'][#/zmax]&;
+leg = BarLegend[{colfunc,{0,zmax}},LegendLabel->'Velocity (m/s)', LegendMarkerSize -> 500];
+
+(*Draw a gray ploygon using the points of the surface_flow.csv*)
+shape = Graphics[{Gray,Polygon[Import['surface_flow_00500.csv'][[2;;-1,{2,3}]]]}];
+
+(*Clean the data so it's in a usable form*)
+(*Import the data file, and remove the preamble (three lines)*)
+datafile = Import['flow_00500.dat'][[4;;-1]];
+(*There is four seemingly random numbers per line for several lines at the end, this ignores those lines*)
+Do[If[Dimensions[datafile[[i]]][[1]]==4,{CleanData=datafile[[1;;i-1]],Break[]}],{i,1,Dimensions[datafile][[1]]}];
+(*Only the first 5 columns are needed*)
+(*x, y, \[Rho], \[Rho]u, \[Rho]v*)
+Data = CleanData[[All,1;;5]];
+
+(*Declare and fill arrays for the velocity, and streamlines*)
+stream = {};
+velocity = {};
+Do[{If[Data[[i,1]]>xmin && Data[[i,1]]<xmax && Data[[i,2]]>ymin && Data[[i,2]]<ymax,AppendTo[stream,{{Data[[i,1]],Data[[i,2]]},{Data[[i,4]]/Data[[i,3]],Data[[i,5]]/Data[[i,3]]}}]];
+AppendTo[velocity,{Data[[i,1]],Data[[i,2]],Sqrt[(Data[[i,4]]/Data[[i,3]])^2+(Data[[i,5]]/Data[[i,3]])^2]}]},{i,1,Length[Data]}]
+
+velplot = ListDensityPlot[velocity,ColorFunction->colfunc,PlotRange->{{xmin,xmax},{ymin,ymax},{0,zmax}},AspectRatio->Automatic,PlotLegends->leg,ColorFunctionScaling->False,FrameLabel->{'x','y'},PlotLabel->Style['Square Cylinder (Re = 250)',FontSize->18,Black],ImageSize->Full];
+
+VelocityFull = Show[velplot, shape]
+
+\end{lstlisting}
+
+\end{document}
