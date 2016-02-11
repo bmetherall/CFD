@@ -1,8 +1,12 @@
 # Files to ignore
 
 *.pdf
+!CFD.pdf
 *.png
 *.dat
 *.csv
 *.su2
 CFD.nb
+*.aux
+*.log
+*.gz
