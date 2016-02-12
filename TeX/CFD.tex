@@ -7,8 +7,11 @@
 \usepackage{geometry}
 \usepackage{animate}
 \usepackage{listings}
+\usepackage{wrapfig}
 
+\usepackage{lipsum}
 
+%Modified from:
 %http://mathematica.stackexchange.com/questions/42793/highlighting-mathematica-code-in-latex-document
 
 \definecolor{listinggray}{gray}{0.9}
@@ -17,10 +20,11 @@
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{purple}{rgb}{0.5,0,0.5}
+\definecolor{orange}{rgb}{1,0.5,0}
 
 % define a custom mathematica language for syntax highlighting
 \lstdefinelanguage{myMMA}{
-keywords={SetDirectory, ColorData, BarLegend, LegendLabel, Graphics, Gray, Polygon, Import, Do, If, Dimensions, Break, AppendTo, Sqrt, All, Length, ListDensityPlot, ColorFunction, PlotRange, AspectRatio, PlotLegends, ColorFunctionScaling, FrameLabel, PlotLabel, Style, FontSize, Black, ImageSize, Full, Show, Automatic, False, LegendMarkerSize},
+keywords={SetDirectory, ColorData, BarLegend, LegendLabel, Graphics, Gray, Polygon, Import, Do, If, Dimensions, Break, AppendTo, Sqrt, All, Length, ListDensityPlot, ColorFunction, PlotRange, AspectRatio, PlotLegends, ColorFunctionScaling, FrameLabel, PlotLabel, Style, FontSize, Black, ImageSize, Full, Show, Automatic, False, LegendMarkerSize, ToString, $CommandLine, Print, LabelStyle, ListContourPlot, ContourShading, Export, Contours},
 keywords=[2]{i},
 keywordstyle=\color{black},
 keywordstyle=[2]\color{mygreen},
@@ -30,11 +34,13 @@ identifierstyle=\color{blue},
 sensitive=false,
 comment=[l]{(*},
 morecomment=[s]{/*}{*/},
+morecomment=[l][\color{orange}]{\#!},
 morestring=[b]',
 morestring=[b]",
 breaklines=true,
 captionpos=b,
-numbers=left
+numbers=left,
+literate={->}{$\rightarrow{}$}{1}
 }
 
 
@@ -50,16 +56,16 @@ numbers=left
 
 \section{Introduction}
 
-\begin{figure}[h]
+\begin{wrapfigure}{r}{0.5\textwidth}
 \label{airfoilanimation}
 \centering
-\animategraphics[label=airfoil, loop, width = 0.5\linewidth, autoplay]{12}{Airfoil_Animation/Square_Cylinder}{0021}{0044}
+\animategraphics[label=airfoil, loop, width = 0.5\textwidth, autoplay]{12}{Airfoil_Animation_Turb/Square_Cylinder}{0050}{0074}
 \caption{Look at how neat that is!}
-\end{figure}
+\end{wrapfigure}
+
+\lipsum[1-4]
 
 \section{Theory}
-
-Figure \ref{airfoilanimation} is neat.
 
 \section{SU2}
 
@@ -67,43 +73,21 @@ Figure \ref{airfoilanimation} is neat.
 
 \section{Code}
 
-\begin{lstlisting}[breaklines=true, label=code, caption={This is my caption.}]
-(*Change the current directory to where the files are*)
-SetDirectory['/home/brady/SU2/CFD/Results/Square_Cylinder'];
+\begin{figure}[p]
+\lstinputlisting[breaklines=true, label=makecontour, caption={The Wolfram script used to generate Figure \ref{airfoilanimation}.}]{MakeContour.m}
+\end{figure}
 
-(*Set the plot limits*)
-xmin = -2;
-xmax = 6;
-ymin = -2;
-ymax = 2;
-zmax = 20;
+\section{Results}
 
-(*Set the colour function as well as the legend style*)
-colfunc = ColorData['SunsetColors'][#/zmax]&;
-leg = BarLegend[{colfunc,{0,zmax}},LegendLabel->'Velocity (m/s)', LegendMarkerSize -> 500];
+\begin{figure}[ht]
+\centering
+\label{boundary}
+\includegraphics[width=0.75\textwidth]{./Pictures/Static_Cylinder_NS_Boundary}
+\caption{The boundary layer that forms due to a viscous fluid.}
+\end{figure}
 
-(*Draw a gray ploygon using the points of the surface_flow.csv*)
-shape = Graphics[{Gray,Polygon[Import['surface_flow_00500.csv'][[2;;-1,{2,3}]]]}];
 
-(*Clean the data so it's in a usable form*)
-(*Import the data file, and remove the preamble (three lines)*)
-datafile = Import['flow_00500.dat'][[4;;-1]];
-(*There is four seemingly random numbers per line for several lines at the end, this ignores those lines*)
-Do[If[Dimensions[datafile[[i]]][[1]]==4,{CleanData=datafile[[1;;i-1]],Break[]}],{i,1,Dimensions[datafile][[1]]}];
-(*Only the first 5 columns are needed*)
-(*x, y, \[Rho], \[Rho]u, \[Rho]v*)
-Data = CleanData[[All,1;;5]];
 
-(*Declare and fill arrays for the velocity, and streamlines*)
-stream = {};
-velocity = {};
-Do[{If[Data[[i,1]]>xmin && Data[[i,1]]<xmax && Data[[i,2]]>ymin && Data[[i,2]]<ymax,AppendTo[stream,{{Data[[i,1]],Data[[i,2]]},{Data[[i,4]]/Data[[i,3]],Data[[i,5]]/Data[[i,3]]}}]];
-AppendTo[velocity,{Data[[i,1]],Data[[i,2]],Sqrt[(Data[[i,4]]/Data[[i,3]])^2+(Data[[i,5]]/Data[[i,3]])^2]}]},{i,1,Length[Data]}]
 
-velplot = ListDensityPlot[velocity,ColorFunction->colfunc,PlotRange->{{xmin,xmax},{ymin,ymax},{0,zmax}},AspectRatio->Automatic,PlotLegends->leg,ColorFunctionScaling->False,FrameLabel->{'x','y'},PlotLabel->Style['Square Cylinder (Re = 250)',FontSize->18,Black],ImageSize->Full];
-
-VelocityFull = Show[velplot, shape]
-
-\end{lstlisting}
 
 \end{document}
