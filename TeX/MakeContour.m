@@ -1,7 +1,7 @@
 #!/usr/local/bin/WolframScript -script
 
 (*Change the current directory*)
-SetDirectory["/home/brady/SU2/CFD/Results/Pitching_Airfoil"];
+SetDirectory["/home/brady/SU2/CFD/Results/Pitching_Airfoil_Turb"];
 Print[ToString[$CommandLine[[4]]]];
 
 CSV = "surface_flow_0" <> ToString[$CommandLine[[4]]] <> ".csv";
@@ -9,7 +9,7 @@ DAT = "flow_0" <> ToString[$CommandLine[[4]]] <> ".dat";
 PNG = "Square_Cylinder" <> ToString[$CommandLine[[4]]] <> ".png";
 
 (*Set the plot limits, colour function, and the legend style*)
-xyzlimits = {{-0.5, 1.5},{-1, 1},{0, 400}};
+xyzlimits = {{-0.5, 2},{-1, 1},{0, 400}};
 colfunc = ColorData["SunsetColors"][#/xyzlimits[[3,2]]] &;
 leg = BarLegend[{colfunc, xyzlimits[[3]]}, LegendLabel -> "Velocity (m/s)",
     LegendMarkerSize -> 500];
@@ -42,9 +42,9 @@ velplot = ListDensityPlot[velocity, ColorFunction -> colfunc,
    FrameLabel -> {"x", "y"}, PlotLabel -> "Pitching Airfoil", 
    ImageSize -> Full];
 
-contplot = ListContourPlot[velocity, 
-   PlotRange -> xyzlimits, 
+contplot = ListContourPlot[velocity, PlotRange -> xyzlimits, 
    ContourShading -> None, Contours -> {200, 250, 300, 350}];
 
-SetDirectory["/home/brady/SU2/CFD/TeX/Airfoil_Animation"];
+SetDirectory["/home/brady/SU2/CFD/TeX/Airfoil_Animation_Turb"];
 Export[PNG, Show[velplot, contplot, shape]]
+
