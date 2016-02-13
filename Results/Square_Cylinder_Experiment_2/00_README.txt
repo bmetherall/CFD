@@ -1,1 +1,1 @@
-This experiment is using the defaul settings of the config file, but not restarting the solution.
+This experiment is using 22000 Re, 0.2 Mach, and SA turbulence (The same that was in that paper).
