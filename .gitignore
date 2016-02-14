@@ -10,3 +10,4 @@ CFD.nb
 *.aux
 *.log
 *.gz
+*.sh
