@@ -9,11 +9,12 @@
 \usepackage{listings}
 \usepackage{wrapfig}
 \usepackage{subcaption}
+\usepackage{hyperref}
 
 \usepackage{lipsum}
 
 %Modified from:
-%http://mathematica.stackexchange.com/questions/42793/highlighting-mathematica-code-in-latex-document
+%http://mathematica.stackexchange.com/a/83811
 
 \definecolor{listinggray}{gray}{0.9}
 \definecolor{graphgray}{gray}{0.7}
@@ -57,61 +58,153 @@ literate={->}{$\rightarrow{}$}{1}
 
 \section{Introduction}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-\label{airfoilanimation}
+\begin{wrapfigure}{R}{0.5\textwidth}
 \centering
-\animategraphics[label=airfoil, loop, width = 0.5\textwidth, autoplay]{12}{Airfoil_Animation_Turb/Square_Cylinder}{0050}{0074}
-\caption{Look at how neat that is!}
+\animategraphics[loop, width = 0.5\textwidth, autoplay]{12}{Airfoil_Animation_Turb/Square_Cylinder}{0050}{0074}
+\caption[Pitching Airfoil Animation]{Look at how neat that is!}
+\label{fig:airfoilanimation}
 \end{wrapfigure}
 
 \lipsum[1-4]
 
-\section{Theory}
+\newpage
+\listoffigures
+\newpage
 
-\section{SU2}
+\section{Theory}
+\lipsum[1-2]
+
+\begin{align*}
+\frac{D\bf{u}}{Dt} &= \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u}
+\end{align*}
+
+Euler's Equations
+\begin{equation}
+\label{euler}
+\begin{aligned}
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \bf{g} \\
+\nabla \cdot \bf{u} &= 0
+\end{aligned}
+\end{equation}
+
+Cauchy's Equation
+\begin{align}
+\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= \nabla \cdot \bf{T} + \rho \bf{g}
+\end{align}
+
+Navier-Stokes Equation
+\begin{equation}
+\begin{aligned}
+\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \quad \text{Letting } \nu = \frac{\mu}{\rho} \\
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g}
+\end{aligned}
+\end{equation}
+
+
+\section{SU2 Code}
+\lipsum[1-2]
 
 \subsection{Mesh}
+\lipsum[1-2]
 
-\section{Code}
+\section{Scripting and Automation}
+\lipsum[1-2]
 
 \begin{figure}[p]
-\lstinputlisting[breaklines=true, label=makecontour, caption={The Wolfram script used to generate Figure \ref{airfoilanimation}.}]{MakeContour.m}
+\lstinputlisting[breaklines=true, label=makecontour]{MakeContour.m}
+\caption[Automated Wolfram Script]{The Wolfram script used to generate Figure \ref{fig:airfoilanimation}. Syntax highlighting modified from \cite{syntax}.}
+\label{script}
 \end{figure}
 
 \section{Results}
+\lipsum[1-2]
 
-\begin{figure}[ht]
-\centering
-\label{boundary}
-\includegraphics[width=0.75\textwidth]{./Pictures/Static_Cylinder_NS_Boundary}
-\caption{The boundary layer that forms due to a viscous fluid.}
+\subsection{Steady Flow Around a Static Cylinder}
+\lipsum[1-2]
+
+\begin{figure}[htb]
+\begin{subfigure}{0.5\linewidth}
+  \centering
+  \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Euler}
+  \caption{Euler}
+  \label{fig:staticeuler}
+\end{subfigure}
+\begin{subfigure}{0.5\linewidth}
+  \centering
+  \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_NS}
+  \caption{NS}
+  \label{fig:staticNS}
+\end{subfigure}
+\caption[Static Cylinder]{Static Cylinders}
+\label{fig:static}
 \end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{./Pictures/Static_Cylinder_NS_Boundary}
+\caption[Boundary Layer Due to Viscous Flow]{The boundary layer that forms due to a viscous fluid.}
+\label{boundary}
+\end{figure}
+
+\subsection{Turbulent Cylinder -- Vortex Shedding}
+
+The equation \eqref{euler} is interesting.
+
+\begin{wrapfigure}{R}{0.6\textwidth}
+\centering
+\animategraphics[label=vortex, loop, width = 0.6\textwidth, autoplay]{12}{Vortex_Animation/Vortex_Shedding}{00}{26}
+\caption[Vortex Shedding Animation]{Neat! The full video can be found at \url{https://youtu.be/Zh5lWMpsCJg}}
+\label{vortexanimation}
+\end{wrapfigure}
+
+\lipsum[1-2]
 
 \begin{figure}
 \begin{subfigure}{\linewidth}
   \centering
-  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1400}
+  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1600}
   \caption{$t = 0$}
 \end{subfigure} \\
 \begin{subfigure}{\textwidth}
   \centering
-  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1427}
+  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1628}
   \caption{$t = \frac{1}{4}T$}
 \end{subfigure} \\
 \begin{subfigure}{\linewidth}
   \centering
-  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1454}
+  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1656}
   \caption{$t = \frac{1}{2}T$}
 \end{subfigure} \\
 \begin{subfigure}{\textwidth}
   \centering
-  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1481}
+  \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1684}
   \caption{$t = \frac{3}{4}T$}
 \end{subfigure}
-\caption{Vortex shedding!}
+\caption[Vortex Shedding at $\frac{1}{4}T$ increments]{Vortex shedding!}
 \label{fig:vortexshedding}
 \end{figure}
 
+\subsection{Airfoil}
+\lipsum[1-2]
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.75\textwidth]{./Pictures/Airfoil_10_0}
+\caption[Airfoil, No Turbulence]{Airfoil no turbulence.}
+\label{airfoil}
+\end{figure}
+
+\newpage
+\begin{thebibliography}{9}
+
+%\bibitem{taketani} %Scale / range
+%Taketani, Mituo and Nakamura, Seitaro and Sasaki, Muneo,
+%\emph{On the Method of the Theory of Nuclear Forces},
+%Progress of Theoretical Physics \textbf{6}, 581-586 (1951).
+
+\bibitem{syntax} %Mathematica syntax highlighting
+Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highlighting Mathematica code in \LaTeX document, URL: http://mathematica.stackexchange.com/a/83811
+
+\end{thebibliography}
 
 \end{document}

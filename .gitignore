@@ -11,3 +11,5 @@ CFD.nb
 *.log
 *.gz
 *.sh
+*.lof
+*.out
