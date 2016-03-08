@@ -26,7 +26,7 @@
 
 % define a custom mathematica language for syntax highlighting
 \lstdefinelanguage{myMMA}{
-keywords={SetDirectory, ColorData, BarLegend, LegendLabel, Graphics, Gray, Polygon, Import, Do, If, Dimensions, Break, AppendTo, Sqrt, All, Length, ListDensityPlot, ColorFunction, PlotRange, AspectRatio, PlotLegends, ColorFunctionScaling, FrameLabel, PlotLabel, Style, FontSize, Black, ImageSize, Full, Show, Automatic, False, LegendMarkerSize, ToString, $CommandLine, Print, LabelStyle, ListContourPlot, ContourShading, Export, Contours},
+keywords={SetDirectory, ColorData, BarLegend, LegendLabel, Graphics, Gray, Polygon, Import, Do, If, Dimensions, Break, AppendTo, Sqrt, All, Length, ListDensityPlot, ColorFunction, PlotRange, AspectRatio, PlotLegends, ColorFunctionScaling, FrameLabel, PlotLabel, Style, FontSize, Black, ImageSize, Full, Show, Automatic, False, LegendMarkerSize, ToString, $CommandLine, Print, LabelStyle, ListContourPlot, ContourShading, Export, Contours, None, Frame, True},
 keywords=[2]{i},
 keywordstyle=\color{black},
 keywordstyle=[2]\color{mygreen},
@@ -122,7 +122,7 @@ Navier-Stokes Equation
 \subsection{Steady Flow Around a Static Cylinder}
 \lipsum[1-2]
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
 \begin{subfigure}{0.5\linewidth}
   \centering
   \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Euler}
@@ -134,28 +134,40 @@ Navier-Stokes Equation
   \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_NS}
   \caption{NS}
   \label{fig:staticNS}
+\end{subfigure} \\
+\begin{subfigure}{0.5\linewidth}
+ \centering
+ \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Boundary}
+ \caption{No-slip condition.}
+ \label{fig:eulerboundary}
+\end{subfigure}
+\begin{subfigure}{0.5\linewidth}
+ \centering
+ \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Boundary_NS}
+ \caption{The boundary layer that forms due to a viscous fluid.}
+ \label{fig:nsboundary}
 \end{subfigure}
 \caption[Static Cylinder]{Static Cylinders}
 \label{fig:static}
 \end{figure}
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=0.75\textwidth]{./Pictures/Static_Cylinder_NS_Boundary}
-\caption[Boundary Layer Due to Viscous Flow]{The boundary layer that forms due to a viscous fluid.}
-\label{boundary}
-\end{figure}
+%\begin{figure}[htb]
+%\centering
+%\includegraphics[width=0.6\textwidth]{./Pictures/Static_Cylinder_NS_Boundary}
+%\caption[Boundary Layer Due to Viscous Flow]{The boundary layer that forms due to a viscous fluid.}
+%\label{fig:boundary}
+%\end{figure}
 
 \subsection{Turbulent Cylinder -- Vortex Shedding}
 
 The equation \eqref{euler} is interesting.
 
-\begin{wrapfigure}{R}{0.6\textwidth}
+\begin{figure}[htb]
 \centering
-\animategraphics[label=vortex, loop, width = 0.6\textwidth, autoplay]{12}{Vortex_Animation/Vortex_Shedding}{00}{26}
+\animategraphics[label=vortex, loop, width = \textwidth, autoplay]{12}{Vortex_Animation/Vortex_Shedding}{00}{26}
 \caption[Vortex Shedding Animation]{Neat! The full video can be found at \url{https://youtu.be/Zh5lWMpsCJg}}
 \label{vortexanimation}
-\end{wrapfigure}
+\end{figure}
 
 \lipsum[1-2]
 
@@ -185,7 +197,7 @@ The equation \eqref{euler} is interesting.
 \end{figure}
 
 \subsection{Airfoil}
-\lipsum[1-2]
+\lipsum[4-7]
 
 \begin{figure}[ht]
 \centering
@@ -193,6 +205,10 @@ The equation \eqref{euler} is interesting.
 \caption[Airfoil, No Turbulence]{Airfoil no turbulence.}
 \label{airfoil}
 \end{figure}
+
+\section{Conclusion}
+
+\lipsum[5-7]
 
 \newpage
 \begin{thebibliography}{9}
