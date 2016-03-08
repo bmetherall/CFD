@@ -2,7 +2,11 @@ Static Cylinder Euler
 Static Cylinder NS
 Static Cylinder NS Bonudary
 
+Static Cylinder Vortex Shedding
+
 Static Square Vortex Shedding
 
 Airfoil
+Pitching Airfoil
+
 
