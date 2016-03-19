@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[10pt, titlepage]{article}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{color}
@@ -56,6 +56,8 @@ literate={->}{$\rightarrow{}$}{1}
 \setlength\parindent{0pt}
 \lstset{language=myMMA}
 
+\listoffigures
+
 \section{Introduction}
 
 \begin{wrapfigure}{R}{0.5\textwidth}
@@ -67,13 +69,9 @@ literate={->}{$\rightarrow{}$}{1}
 
 \lipsum[1-4]
 
-\newpage
-\listoffigures
-\newpage
-
 \section{Theory}
-\lipsum[1-2]
 
+\subsection{Non-Turbulent Flow Equations}
 \begin{align*}
 \frac{D\bf{u}}{Dt} &= \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u}
 \end{align*}
@@ -95,17 +93,55 @@ Cauchy's Equation
 Navier-Stokes Equation
 \begin{equation}
 \begin{aligned}
-\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \quad \text{Letting } \nu = \frac{\mu}{\rho} \\
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g}
+\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \\
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g} \\
+\sum_j \frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} &= \sum_j  -\frac{1}{\rho} \frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j^2} + g_i
 \end{aligned}
 \end{equation}
 
+\subsection{Reynolds-Averaged Navier-Stokes (RANS)}
 
-\section{SU2 Code}
+\begin{align*}
+\mu = \mu_{dyn} + \mu_{turb}
+\end{align*}
+
+\subsection{Spalart-Allmaras (SA) Turbulent Model}\label{subsec:saturb}
+A one equation turbulent model.
+\begin{align}
+\mu_{turb} = \rho \hat{\nu} f_{v1}; \qquad f_{v1} = \frac{\chi^3}{\chi^3+c_{v1}^3}; \qquad \chi = \frac{\hat{\nu}}{\nu}; \qquad \nu = \frac{\mu_{dyn}}{\rho}
+\label{eq:saeq}
+\end{align}
+Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}$ is obtained by solving the convection-diffusion equation,
+\begin{align}
+\frac{\partial \hat{\nu}}{\partial t} = D \nabla^2 \hat{\nu} - \overline{\bf{u}} \nabla \hat{\nu},
+\end{align}
+where $D$ is the diffusivity, and $\overline{\bf{u}}$ is the average flow velocity.
+
+\section{Stanford University Unstructured ($SU^2$) Code}
+$c_{v1} = 7.1$ for \eqref{eq:saeq} \\
+
+Uses the SA turbulence model (\ref{subsec:saturb}) as well as the Menter Shear Stress Transport (SST) Model, however the SST model was not used in any of the simulations.
+
 \lipsum[1-2]
 
 \subsection{Mesh}
+
+\begin{wrapfigure}{R}{0.5\textwidth}
+\centering
+\includegraphics[width = 0.5\textwidth]{Pictures/AirfoilMesh}
+\caption[Mesh of an Airfoil]{Mesh of an airfoil \cite{mesh}.}
+\label{fig:airfoilmesh}
+\end{wrapfigure}
+
 \lipsum[1-2]
+
+\subsection{Numerics}
+
+Typically a particular node within the mesh will be surrounded by six triangular cells. Using the centroids of the cells, as well as the midpoints of the edges, we can construct a hexagonal region, $\Omega_i$. This leads to the discretized form of our PDE:
+\begin{equation*}
+\int_{\Omega_i} \frac{\partial \bf{u}}{\partial t} d\Omega + R_i(\bf{u}) = 0
+\end{equation*}
+where $R_i(\bf{u})$ is the residual.
 
 \section{Scripting and Automation}
 \lipsum[1-2]
@@ -125,7 +161,7 @@ Navier-Stokes Equation
 \begin{figure}[htbp]
 \begin{subfigure}{0.5\linewidth}
   \centering
-  \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Euler}
+  \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder}
   \caption{Euler}
   \label{fig:staticeuler}
 \end{subfigure}
@@ -220,6 +256,16 @@ The equation \eqref{euler} is interesting.
 
 \bibitem{syntax} %Mathematica syntax highlighting
 Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highlighting Mathematica code in \LaTeX document, URL: http://mathematica.stackexchange.com/a/83811
+
+\bibitem{mesh}
+https://github.com/su2code/SU2/wiki/Quick-Start
+
+\bibitem{su2main}
+Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \\
+\emph{Stanford University Unstructured ($SU^2$): An open-source integrated computational environment for multi-physics simulation and design}, \\
+51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition. 
+
+
 
 \end{thebibliography}
 
