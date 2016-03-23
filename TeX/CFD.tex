@@ -62,10 +62,16 @@ literate={->}{$\rightarrow{}$}{1}
 
 \begin{wrapfigure}{R}{0.5\textwidth}
 \centering
-\animategraphics[loop, width = 0.5\textwidth, autoplay]{12}{Airfoil_Animation_Turb/Square_Cylinder}{0050}{0074}
-\caption[Pitching Airfoil Animation]{Look at how neat that is!}
-\label{fig:airfoilanimation}
+\includegraphics[width = 0.5\textwidth]{Pictures/aero}
+\caption[Possibilities with CFD]{Possibilities with CFD \cite{aeroplane}}
+\label{fig:aeroplane}
 \end{wrapfigure}
+
+CFD joins theory and experiment as third subfield \\
+CFD is like a wind tunnel but cheaper and faster \\
+reshaping \\
+changing Re, Mach, P ... \\
+portable / remote access \\
 
 \lipsum[1-4]
 
@@ -77,13 +83,10 @@ literate={->}{$\rightarrow{}$}{1}
 \end{align*}
 
 Euler's Equations
-\begin{equation}
-\label{euler}
-\begin{aligned}
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \bf{g} \\
-\nabla \cdot \bf{u} &= 0
-\end{aligned}
-\end{equation}
+\begin{align}
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \bf{g} \label{eq:euler} \\
+\nabla \cdot \bf{u} &= 0 \label{eq:incomp}
+\end{align}
 
 Cauchy's Equation
 \begin{align}
@@ -91,31 +94,45 @@ Cauchy's Equation
 \end{align}
 
 Navier-Stokes Equation
-\begin{equation}
-\begin{aligned}
-\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \\
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g} \\
-\sum_j \frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} &= \sum_j  -\frac{1}{\rho} \frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j^2} + g_i
-\end{aligned}
-\end{equation}
+\begin{align}
+\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \nonumber \\
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g} \label{eq:NSE}
+\end{align}
 
-\subsection{Reynolds-Averaged Navier-Stokes (RANS)}
-
+\subsection{Reynolds-Averaged Navier-Stokes (RANS) Equation}
+The Navier-Stokes equations are notoriously difficult to solve since it is a second order partial differential equation, with three components, and four dependencies each. To make solving the Navier-Stokes equations easier, especially for turbulent flows, we can assume the flow is the superposition of the steady, and turbulent flows, and then take the time average. We can make the following variable substitutions
 \begin{align*}
-\mu = \mu_{dyn} + \mu_{turb}
+\alpha_i &\equiv \overline{\alpha_i} + \alpha_i', \\
+\text{where } \overline{\alpha_i} &= \frac{1}{\tau} \int_0^\tau \alpha_i dt
 \end{align*}
+is the steady, time average on some time scale $\tau$, and $\alpha_i'$ is the turbulent perturbations. It follows from this definition that
+\begin{align}
+\overline{\alpha_i'} = 0, \quad \frac{\partial \overline{\alpha_i}}{\partial t} = 0, \quad \overline{\overline{\alpha_i}} = \overline{\alpha_i}, \quad \text{and} \quad \overline{\frac{\partial \alpha_i}{\partial x_i}} =  \frac{\partial \overline{\alpha_i}}{\partial x_i}. \label{eq:RANSprop}
+\end{align}
+We can write \eqref{eq:NSE} in the more suggestive component form:
+\begin{align*}
+\sum_j \frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} &= \sum_j  -\frac{1}{\rho} \frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j^2} + g_i,
+\end{align*}
+then, making the appropriate substitutions, taking the time average, and using the properties from  \eqref{eq:RANSprop}, we obtain
+\begin{align*}
+\sum_j \overline{u_j} \frac{\partial \overline{u_i}}{\partial x_j} + u_j' \frac{\partial u_i'}{\partial x_j} &= \sum_j  -\frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u_i}}{\partial x_j^2} + \overline{g_i}.
+\end{align*}
+Rewriting this in vector form gives the Reynolds-Averaged Navier-Stokes equation,
+\begin{align}
+\left( \bf{\overline{u}} \cdot \nabla \right) \bf{\overline{u}} + \left( \bf{u'} \cdot \nabla \right) \bf{u'}&= - \frac{1}{\rho} \nabla \overline{p} + \nu \nabla^2 \bf{\overline{u}} + \bf{\overline{g}}. \label{eq:RANS}
+\end{align}
 
 \subsection{Spalart-Allmaras (SA) Turbulent Model}\label{subsec:saturb}
-A one equation turbulent model.
+While \eqref{eq:RANS} makes fluid flow predictions easier, a model is still needed for $\nu$. According to the Boussinesq hypothesis \cite{Boussinesq}, an increase in the viscosity gives the effect of turbulence, and therefore $\nu = \overline{\nu} + \nu'$. One such way to model this altered viscosity and the turbulence, is the Spalart-Allmaras turbulence model. This model determines the turbulent viscosity using the following:
 \begin{align}
-\mu_{turb} = \rho \hat{\nu} f_{v1}; \qquad f_{v1} = \frac{\chi^3}{\chi^3+c_{v1}^3}; \qquad \chi = \frac{\hat{\nu}}{\nu}; \qquad \nu = \frac{\mu_{dyn}}{\rho}
+\nu' = \hat{\nu} f_{v1}; \qquad f_{v1} = \frac{\chi^3}{\chi^3+c_{v1}^3}; \qquad \chi \equiv \frac{\hat{\nu}}{\overline{\nu}}.
 \label{eq:saeq}
 \end{align}
 Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}$ is obtained by solving the convection-diffusion equation,
-\begin{align}
+\begin{align*}
 \frac{\partial \hat{\nu}}{\partial t} = D \nabla^2 \hat{\nu} - \overline{\bf{u}} \nabla \hat{\nu},
-\end{align}
-where $D$ is the diffusivity, and $\overline{\bf{u}}$ is the average flow velocity.
+\end{align*}
+where $D$ is the diffusivity.
 
 \section{Stanford University Unstructured ($SU^2$) Code}
 $c_{v1} = 7.1$ for \eqref{eq:saeq} \\
@@ -124,7 +141,7 @@ Uses the SA turbulence model (\ref{subsec:saturb}) as well as the Menter Shear S
 
 \lipsum[1-2]
 
-\subsection{Mesh}
+\subsection{Mesh and Numerics}
 
 \begin{wrapfigure}{R}{0.5\textwidth}
 \centering
@@ -132,10 +149,6 @@ Uses the SA turbulence model (\ref{subsec:saturb}) as well as the Menter Shear S
 \caption[Mesh of an Airfoil]{Mesh of an airfoil \cite{mesh}.}
 \label{fig:airfoilmesh}
 \end{wrapfigure}
-
-\lipsum[1-2]
-
-\subsection{Numerics}
 
 Typically a particular node within the mesh will be surrounded by six triangular cells. Using the centroids of the cells, as well as the midpoints of the edges, we can construct a hexagonal region, $\Omega_i$. This leads to the discretized form of our PDE:
 \begin{equation*}
@@ -196,7 +209,7 @@ where $R_i(\bf{u})$ is the residual.
 
 \subsection{Turbulent Cylinder -- Vortex Shedding}
 
-The equation \eqref{euler} is interesting.
+The equation \eqref{eq:euler} is interesting.
 
 \begin{figure}[htb]
 \centering
@@ -235,11 +248,20 @@ The equation \eqref{euler} is interesting.
 \subsection{Airfoil}
 \lipsum[4-7]
 
-\begin{figure}[ht]
+\begin{figure}
+\begin{subfigure}{0.5\linewidth}
 \centering
-\includegraphics[width=0.75\textwidth]{./Pictures/Airfoil_10_0}
-\caption[Airfoil, No Turbulence]{Airfoil no turbulence.}
+\includegraphics[width=\textwidth]{./Pictures/Airfoil}
+\caption{Airfoil no turbulence.}
 \label{airfoil}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+\centering
+\animategraphics[loop, width = \textwidth, autoplay]{12}{Airfoil_Animation_Turb/Airfoil_Turb}{0050}{0074}
+\caption{Pitching airfoil, with velocity contours.}
+\label{fig:airfoilanimation}
+\end{subfigure}
+\caption[Turbulent Airfoil Animation, and Laminar Airfoil Streamlines]{Airfoil things.}
 \end{figure}
 
 \section{Conclusion}
@@ -260,12 +282,16 @@ Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highli
 \bibitem{mesh}
 https://github.com/su2code/SU2/wiki/Quick-Start
 
+\bibitem{aeroplane}
+http://news.stanford.edu/news/2012/january/aero-engineering-software-012412.html
+
 \bibitem{su2main}
 Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \\
 \emph{Stanford University Unstructured ($SU^2$): An open-source integrated computational environment for multi-physics simulation and design}, \\
 51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition. 
 
-
+\bibitem{Boussinesq}
+D.C. Wilcox. \emph{Turbulence Modeling for CFD}. 2nd Ed., DCWIndustries, Inc., 1998.
 
 \end{thebibliography}
 
