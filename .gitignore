@@ -3,6 +3,7 @@
 *.pdf
 !CFD.pdf
 *.png
+*.jpg
 *.dat
 *.csv
 *.su2
