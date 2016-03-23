@@ -6,10 +6,10 @@ Print[ToString[$CommandLine[[4]]]];
 
 CSV = "surface_flow_0" <> ToString[$CommandLine[[4]]] <> ".csv";
 DAT = "flow_0" <> ToString[$CommandLine[[4]]] <> ".dat";
-PNG = "Square_Cylinder" <> ToString[$CommandLine[[4]]] <> ".png";
+PNG = "Airfoil_Turb" <> ToString[$CommandLine[[4]]] <> ".png";
 
 (*Set the plot limits, colour function, and the legend style*)
-xyzlimits = {{-0.5, 2},{-1, 1},{0, 400}};
+xyzlimits = {{-0.5, 2},{-1, 1},{0, 450}};
 colfunc = ColorData["SunsetColors"][#/xyzlimits[[3,2]]] &;
 leg = BarLegend[{colfunc, xyzlimits[[3]]}, LegendLabel -> "Velocity (m/s)",
     LegendMarkerSize -> 500];
