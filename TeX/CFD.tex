@@ -78,26 +78,34 @@ portable / remote access \\
 \section{Theory}
 
 \subsection{Non-Turbulent Flow Equations}
-\begin{align*}
-\frac{D\bf{u}}{Dt} &= \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u}
-\end{align*}
+%\begin{align*}
+%\frac{D\bf{u}}{Dt} &= \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u}
+%\end{align*}
 
-Euler's Equations
+Non-viscous, ideal fluids obey two equations of motion collectively called Euler's equations. The first is the incompressibility condition 
 \begin{align}
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \bf{g} \label{eq:euler} \\
-\nabla \cdot \bf{u} &= 0 \label{eq:incomp}
+\nabla \cdot \bf{u} &= 0
+\label{eq:incomp}
 \end{align}
-
-Cauchy's Equation
+which arises by assuming the volume of a fluid element, as well as it's density is constant. The second equation can be derived from Newton's second law, 
+\begin{align}
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \bf{g}. \label{eq:euler}
+\end{align}
+The problem with Euler's equations is that they are only applicable for non-viscous fluids, which is not very practical. One of the subtler details is that the force experienced by a fluid element is always normal to it's surface. However, due to the fluid elements interacting, tangential forces arise. Cauchy's equation,
 \begin{align}
 \rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= \nabla \cdot \bf{T} + \rho \bf{g}
+\label{eq:cauchy}
 \end{align}
-
-Navier-Stokes Equation
+adds a stress tensor to handle theses additional forces. If we chose $\textbf{T}_{ij} = -p \delta_{ij}$ we simply get \eqref{eq:euler}, as expected, however, if we chose a more complex tensor with a deformation term, such as
+\begin{align*}
+\textbf{T}_{ij} = -p \delta_{ij} + \mu \left( \frac{\partial u_j}{\partial x_i} + \frac{\partial u_i}{\partial x_j} \right),
+\end{align*}
+\eqref{eq:cauchy} reduces to 
 \begin{align}
-\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \nonumber \\
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g} \label{eq:NSE}
+\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \quad \text{or,} \nonumber \\
+\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g}, \label{eq:NSE}
 \end{align}
+which along with the incompressibility condition, \eqref{eq:incomp}, are the Navier-Stokes equations. Notice that if $\nu = 0$, there is no interaction between fluids and this reduces simply to \eqref{eq:euler}. 
 
 \subsection{Reynolds-Averaged Navier-Stokes (RANS) Equation}
 The Navier-Stokes equations are notoriously difficult to solve since it is a second order partial differential equation, with three components, and four dependencies each. To make solving the Navier-Stokes equations easier, especially for turbulent flows, we can assume the flow is the superposition of the steady, and turbulent flows, and then take the time average. We can make the following variable substitutions
