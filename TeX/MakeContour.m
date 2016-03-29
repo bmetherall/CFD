@@ -2,7 +2,7 @@
 
 (*Change the current directory*)
 SetDirectory["/home/brady/SU2/CFD/Results/Pitching_Airfoil_Turb"];
-Print[ToString[$CommandLine[[4]]]];
+Print[ToString[$CommandLine[[4]]]]; (*To check the progress*)
 
 CSV = "surface_flow_0" <> ToString[$CommandLine[[4]]] <> ".csv";
 DAT = "flow_0" <> ToString[$CommandLine[[4]]] <> ".dat";
@@ -36,9 +36,9 @@ Do[AppendTo[velocity, {Data[[i, 1]], Data[[i, 2]],
    {i, 1, Length[Data]}]
 
 velplot = ListDensityPlot[velocity, ColorFunction -> colfunc, 
-   PlotRange -> xyzlimits, 
-   AspectRatio -> Automatic, LabelStyle -> {Black, FontSize -> 18}, 
-   PlotLegends -> leg, ColorFunctionScaling -> False, Frame -> True, 
+   PlotRange -> xyzlimits, AspectRatio -> Automatic,
+   LabelStyle -> {Black, FontSize -> 18}, PlotLegends -> leg,
+   ColorFunctionScaling -> False, Frame -> True, 
    FrameLabel -> {"x", "y"}, PlotLabel -> "Pitching Airfoil", 
    ImageSize -> Full];
 

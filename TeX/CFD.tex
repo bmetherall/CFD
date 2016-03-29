@@ -26,6 +26,7 @@
 
 % define a custom mathematica language for syntax highlighting
 \lstdefinelanguage{myMMA}{
+basicstyle=\ttfamily,
 keywords={SetDirectory, ColorData, BarLegend, LegendLabel, Graphics, Gray, Polygon, Import, Do, If, Dimensions, Break, AppendTo, Sqrt, All, Length, ListDensityPlot, ColorFunction, PlotRange, AspectRatio, PlotLegends, ColorFunctionScaling, FrameLabel, PlotLabel, Style, FontSize, Black, ImageSize, Full, Show, Automatic, False, LegendMarkerSize, ToString, $CommandLine, Print, LabelStyle, ListContourPlot, ContourShading, Export, Contours, None, Frame, True},
 keywords=[2]{i},
 keywordstyle=\color{black},
@@ -105,7 +106,7 @@ adds a stress tensor to handle theses additional forces. If we chose $\textbf{T}
 \rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \quad \text{or,} \nonumber \\
 \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g}, \label{eq:NSE}
 \end{align}
-which along with the incompressibility condition, \eqref{eq:incomp}, are the Navier-Stokes equations. Notice that if $\nu = 0$, there is no interaction between fluids and this reduces simply to \eqref{eq:euler}. 
+which along with the incompressibility condition, \eqref{eq:incomp}, are the Navier-Stokes equations. Notice that if $\nu = 0$, there is no interaction between fluids elements, and this reduces simply to Euler's equations, \eqref{eq:euler}. 
 
 \subsection{Reynolds-Averaged Navier-Stokes (RANS) Equation}
 The Navier-Stokes equations are notoriously difficult to solve since it is a second order partial differential equation, with three components, and four dependencies each. To make solving the Navier-Stokes equations easier, especially for turbulent flows, we can assume the flow is the superposition of the steady, and turbulent flows, and then take the time average. We can make the following variable substitutions
@@ -113,7 +114,7 @@ The Navier-Stokes equations are notoriously difficult to solve since it is a sec
 \alpha_i &\equiv \overline{\alpha_i} + \alpha_i', \\
 \text{where } \overline{\alpha_i} &= \frac{1}{\tau} \int_0^\tau \alpha_i dt
 \end{align*}
-is the steady, time average on some time scale $\tau$, and $\alpha_i'$ is the turbulent perturbations. It follows from this definition that
+is the steady time average on some time scale $\tau$, and $\alpha_i'$ is the turbulent perturbations. It follows from this definition that
 \begin{align}
 \overline{\alpha_i'} = 0, \quad \frac{\partial \overline{\alpha_i}}{\partial t} = 0, \quad \overline{\overline{\alpha_i}} = \overline{\alpha_i}, \quad \text{and} \quad \overline{\frac{\partial \alpha_i}{\partial x_i}} =  \frac{\partial \overline{\alpha_i}}{\partial x_i}. \label{eq:RANSprop}
 \end{align}
@@ -160,21 +161,41 @@ Uses the SA turbulence model (\ref{subsec:saturb}) as well as the Menter Shear S
 
 Typically a particular node within the mesh will be surrounded by six triangular cells. Using the centroids of the cells, as well as the midpoints of the edges, we can construct a hexagonal region, $\Omega_i$. This leads to the discretized form of our PDE:
 \begin{equation*}
-\int_{\Omega_i} \frac{\partial \bf{u}}{\partial t} d\Omega + R_i(\bf{u}) = 0
+\int_{\Omega_i} \frac{\partial \bf{u}}{\partial t} d\Omega + R_i(\textbf{u}) = 0
 \end{equation*}
 where $R_i(\bf{u})$ is the residual.
 
 \section{Scripting and Automation}
-\lipsum[1-2]
+
+Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots. The $SU^2$ code natively writes to the data files in the format used for Tecplot, a visualization and analysis tool for computational fluid dynamics \cite{tecplot}. Since Tecplot was not used, a Wolfram function was needed to convert the data to a form Mathematica could use. Once the data was in a usable form, the \texttt{ListDensityPlot} function was used to create the images. The function to tidy the data along with the plotting function were combined into a Wolfram script such as Figure \ref{fig:script}, which can be executed from the terminal. To fully automate the image generation, a shell script was written to iterate over each data file.
 
 \begin{figure}[p]
 \lstinputlisting[breaklines=true, label=makecontour]{MakeContour.m}
 \caption[Automated Wolfram Script]{The Wolfram script used to generate Figure \ref{fig:airfoilanimation}. Syntax highlighting modified from \cite{syntax}.}
-\label{script}
+\label{fig:script}
 \end{figure}
 
 \section{Results}
 \lipsum[1-2]
+
+\subsection{Airfoil}
+\lipsum[4-7]
+
+\begin{figure}
+\begin{subfigure}{0.5\linewidth}
+\centering
+\includegraphics[width=\textwidth]{./Pictures/Airfoil}
+\caption{Airfoil no turbulence.}
+\label{airfoil}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+\centering
+\animategraphics[loop, width = \textwidth, autoplay]{12}{Airfoil_Animation_Turb/Airfoil_Turb}{0050}{0074}
+\caption{Pitching airfoil, with velocity contours.}
+\label{fig:airfoilanimation}
+\end{subfigure}
+\caption[Turbulent Airfoil Animation, and Laminar Airfoil Streamlines]{Airfoil things.}
+\end{figure}
 
 \subsection{Steady Flow Around a Static Cylinder}
 \lipsum[1-2]
@@ -253,25 +274,6 @@ The equation \eqref{eq:euler} is interesting.
 \label{fig:vortexshedding}
 \end{figure}
 
-\subsection{Airfoil}
-\lipsum[4-7]
-
-\begin{figure}
-\begin{subfigure}{0.5\linewidth}
-\centering
-\includegraphics[width=\textwidth]{./Pictures/Airfoil}
-\caption{Airfoil no turbulence.}
-\label{airfoil}
-\end{subfigure}
-\begin{subfigure}{0.5\textwidth}
-\centering
-\animategraphics[loop, width = \textwidth, autoplay]{12}{Airfoil_Animation_Turb/Airfoil_Turb}{0050}{0074}
-\caption{Pitching airfoil, with velocity contours.}
-\label{fig:airfoilanimation}
-\end{subfigure}
-\caption[Turbulent Airfoil Animation, and Laminar Airfoil Streamlines]{Airfoil things.}
-\end{figure}
-
 \section{Conclusion}
 
 \lipsum[5-7]
@@ -279,27 +281,25 @@ The equation \eqref{eq:euler} is interesting.
 \newpage
 \begin{thebibliography}{9}
 
-%\bibitem{taketani} %Scale / range
-%Taketani, Mituo and Nakamura, Seitaro and Sasaki, Muneo,
-%\emph{On the Method of the Theory of Nuclear Forces},
-%Progress of Theoretical Physics \textbf{6}, 581-586 (1951).
-
-\bibitem{syntax} %Mathematica syntax highlighting
-Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highlighting Mathematica code in \LaTeX document, URL: http://mathematica.stackexchange.com/a/83811
-
-\bibitem{mesh}
-https://github.com/su2code/SU2/wiki/Quick-Start
-
-\bibitem{aeroplane}
-http://news.stanford.edu/news/2012/january/aero-engineering-software-012412.html
-
-\bibitem{su2main}
+\bibitem{su2main} %Main SU2 paper used for reference
 Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \\
 \emph{Stanford University Unstructured ($SU^2$): An open-source integrated computational environment for multi-physics simulation and design}, \\
 51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition. 
 
-\bibitem{Boussinesq}
+\bibitem{Boussinesq} %Increased viscosity -> turbulence
 D.C. Wilcox. \emph{Turbulence Modeling for CFD}. 2nd Ed., DCWIndustries, Inc., 1998.
+
+\bibitem{syntax} %Mathematica syntax highlighting
+Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highlighting Mathematica code in \LaTeX document, URL: http://mathematica.stackexchange.com/a/83811
+
+\bibitem{mesh} %Image of mesh
+https://github.com/su2code/SU2/wiki/Quick-Start
+
+\bibitem{aeroplane} %Image of aeroplane CFD simulation
+http://news.stanford.edu/news/2012/january/aero-engineering-software-012412.html
+
+\bibitem{tecplot}
+http://www.tecplot.com/
 
 \end{thebibliography}
 
