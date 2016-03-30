@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[mathserif]{beamer}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{color}
@@ -32,17 +32,52 @@
 
 \frame{
 \frametitle{Non-Turbulent Flow}
+\begin{itemize}
+\item Incompressibility Condition: $\displaystyle \nabla \cdot \mathbf{u} = 0$
 
+\item Euler's Equations: $\displaystyle \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} = - \frac{1}{\rho} \nabla p + \mathbf{g}$
+
+\item Cauchy's Equation: $\displaystyle \rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) = \nabla \cdot \mathbf{T} + \rho \mathbf{g}$
+
+\item Stress Tensor: $\displaystyle \mathbf{T}_{ij} = -p \delta_{ij} + \mu \left( \frac{\partial u_j}{\partial x_i} + \frac{\partial u_i}{\partial x_j} \right)$
+
+\item Navier-Stokes Equation:
+\begin{equation*}\frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} = - \frac{1}{\rho} \nabla p + \nu \nabla^2 \mathbf{u} + \mathbf{g}
+\end{equation*}
+\end{itemize}
 }
 
 \frame{
-\frametitle{Reynold's-Averaged Navier-Stokes}
-
+\frametitle{Reynolds-Averaged Navier-Stokes}
+To make solving the Navier-Stokes equations easier, especially for turbulent flows, we can assume the flow is the superposition of the steady, and turbulent flows, and then take the time average.
+\begin{align*}
+\alpha_i &\equiv \overline{\alpha_i} + \alpha_i', \\
+\text{where } \overline{\alpha_i} &= \frac{1}{\tau} \int_0^\tau \alpha_i dt \\
+\overline{\alpha_i'} = 0, \quad \frac{\partial \overline{\alpha_i}}{\partial t} = 0, \quad \overline{\overline{\alpha_i}} &= \overline{\alpha_i}, \quad \text{and} \quad \overline{\frac{\partial \alpha_i}{\partial x_i}} =  \frac{\partial \overline{\alpha_i}}{\partial x_i}
+\end{align*}
+Making the appropriate substitutions, taking the time average, and using the properties we obtain the Reynolds-Averaged Navier-Stokes equation,
+\begin{align*}
+\left( \mathbf{\overline{u}} \cdot \nabla \right) \mathbf{\overline{u}} + \overline{\left( \mathbf{u'} \cdot \nabla \right) \mathbf{u'}} = - \frac{1}{\rho} \nabla \overline{p} + \nu \nabla^2 \mathbf{\overline{u}} + \mathbf{\overline{g}} 
+\end{align*}
 }
 
 \frame{
 \frametitle{Spalart-Allmaras Turbulence}
-
+\begin{itemize}
+\item A model is still needed for $\nu$
+\item According to the Boussinesq hypothesis, an increase in the viscosity gives the effect of turbulence
+\item Therefore $\nu = \overline{\nu} + \nu'$
+\item One such way to model the turbulence, is the Spalart-Allmaras turbulence model
+\end{itemize}
+\begin{align*}
+\nu' = \hat{\nu} f_{v1}; \qquad f_{v1} = \frac{\chi^3}{\chi^3+c_{v1}^3}; \qquad \chi \equiv \frac{\hat{\nu}}{\overline{\nu}}.
+\label{eq:saeq}
+\end{align*}
+Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}$ is obtained by solving the convection-diffusion equation,
+\begin{align*}
+\frac{\partial \hat{\nu}}{\partial t} = D \nabla^2 \hat{\nu} - \overline{\mathbf{u}} \nabla \hat{\nu},
+\end{align*}
+where $D$ is the diffusivity.
 }
 
 \section{$SU^2$ Code}
@@ -61,26 +96,67 @@
 
 \frame{
 \frametitle{Scripting and Automation}
-
-Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots. The $SU^2$ code natively writes to the data files in the format used for Tecplot, a visualization and analysis tool for computational fluid dynamics \cite{tecplot}. Since Tecplot was not used, a Wolfram function was needed to convert the data to a form Mathematica could use. Once the data was in a usable form, the \texttt{ListDensityPlot} function was used to create the images. The function to tidy the data along with the plotting function were combined into a Wolfram script such as Figure \ref{fig:script}, which can be executed from the terminal. To fully automate the image generation, a shell script was written to iterate over each data file.
-
+\begin{itemize}
+\item Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots
+\item A Wolfram function was needed to convert the data to a form Mathematica could use
+\item Mathematica's \texttt{ListDensityPlot} function was used to create the images
+\item The function to tidy the data along with the plotting function were combined into a Wolfram script which can be executed from the terminal
+\item  To fully automate the image generation, a shell script was written to iterate over each data file
+\end{itemize}
 }
 
 \section{Results}
 
-\frame{
+\frame[shrink]{
 \frametitle{Airfoil}
-
+\begin{figure}[htb]
+\centering
+\includegraphics{./Pictures/Airfoil}
+\end{figure}
 }
 
-\frame{
+\frame[shrink]{
 \frametitle{Static Cylinder}
+\framesubtitle{Euler}
+\begin{figure}[htb]
+\centering
+\includegraphics{./Pictures/Static_Cylinder}
+\end{figure}
+}
 
+\frame[shrink]{
+\frametitle{Static Cylinder}
+\framesubtitle{Navier-Stokes}
+\begin{figure}[htb]
+\centering
+\includegraphics{./Pictures/Static_Cylinder_NS}
+\end{figure}
+}
+
+\frame[shrink]{
+\frametitle{Static Cylinder}
+\framesubtitle{Euler Boundary}
+\begin{figure}[htb]
+\centering
+\includegraphics{./Pictures/Static_Cylinder_Boundary}
+\end{figure}
+}
+
+\frame[shrink]{
+\frametitle{Static Cylinder}
+\framesubtitle{Navier-Stokes Boundary}
+\begin{figure}[htb]
+\centering
+\includegraphics{./Pictures/Static_Cylinder_Boundary_NS}
+\end{figure}
 }
 
 \frame{
 \frametitle{Vortex Shedding}
-
+\begin{figure}[htb]
+\centering
+\animategraphics[label=vortex, loop, width = \textwidth, autoplay]{12}{Vortex_Animation/Vortex_Shedding}{00}{26}
+\end{figure}
 }
 
 \section{Conclusion}
