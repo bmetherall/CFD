@@ -47,7 +47,7 @@ literate={->}{$\rightarrow{}$}{1}
 }
 
 
-\title{Computational Fluid Dynamics}
+\title{Computational Fluid Dynamics \\ \large with the $SU^2$ Code}
 \author{Brady Metherall \and 100516905}
 \date{Monday April 4, 2016}
 
@@ -61,9 +61,9 @@ literate={->}{$\rightarrow{}$}{1}
 
 \section{Introduction}
 
-\begin{wrapfigure}{R}{0.5\textwidth}
+\begin{wrapfigure}{R}{0.45\textwidth}
 \centering
-\includegraphics[width = 0.5\textwidth]{Pictures/aero}
+\includegraphics[width = 0.45\textwidth]{Pictures/aero}
 \caption[Possibilities with CFD]{Possibilities with CFD \cite{aeroplane}}
 \label{fig:aeroplane}
 \end{wrapfigure}
@@ -74,37 +74,34 @@ reshaping \\
 changing Re, Mach, P ... \\
 portable / remote access \\
 
-\lipsum[1-4]
+\lipsum[1-2]
+\newpage
 
 \section{Theory}
-
 \subsection{Non-Turbulent Flow Equations}
-%\begin{align*}
-%\frac{D\bf{u}}{Dt} &= \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u}
-%\end{align*}
 
 Non-viscous, ideal fluids obey two equations of motion collectively called Euler's equations. The first is the incompressibility condition 
 \begin{align}
-\nabla \cdot \bf{u} &= 0
+\nabla \cdot \mathbf{u} &= 0
 \label{eq:incomp}
 \end{align}
 which arises by assuming the volume of a fluid element, as well as it's density is constant. The second equation can be derived from Newton's second law, 
 \begin{align}
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \bf{g}. \label{eq:euler}
+\frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} &= - \frac{1}{\rho} \nabla p + \mathbf{g}. \label{eq:euler}
 \end{align}
 The problem with Euler's equations is that they are only applicable for non-viscous fluids, which is not very practical. One of the subtler details is that the force experienced by a fluid element is always normal to it's surface. However, due to the fluid elements interacting, tangential forces arise. Cauchy's equation,
 \begin{align}
-\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= \nabla \cdot \bf{T} + \rho \bf{g}
+\rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) &= \nabla \cdot \mathbf{T} + \rho \mathbf{g}
 \label{eq:cauchy}
 \end{align}
-adds a stress tensor to handle theses additional forces. If we chose $\textbf{T}_{ij} = -p \delta_{ij}$ we simply get \eqref{eq:euler}, as expected, however, if we chose a more complex tensor with a deformation term, such as
+adds a stress tensor to handle theses additional forces. If we chose $\mathbf{T}_{ij} = -p \delta_{ij}$ we simply get \eqref{eq:euler}, as expected, however, if we chose a more complex tensor with a deformation term, such as
 \begin{align*}
-\textbf{T}_{ij} = -p \delta_{ij} + \mu \left( \frac{\partial u_j}{\partial x_i} + \frac{\partial u_i}{\partial x_j} \right),
+T_{ij} = -p \delta_{ij} + \mu \left( \frac{\partial u_j}{\partial x_i} + \frac{\partial u_i}{\partial x_j} \right),
 \end{align*}
 \eqref{eq:cauchy} reduces to 
 \begin{align}
-\rho \left( \frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} \right) &= - \nabla p + \mu \nabla^2 \bf{u} + \rho \bf{g} \quad \text{or,} \nonumber \\
-\frac{\partial \bf{u}}{\partial t} + \left( \bf{u} \cdot \nabla \right) \bf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \bf{u} + \bf{g}, \label{eq:NSE}
+\rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) &= - \nabla p + \mu \nabla^2 \mathbf{u} + \rho \mathbf{g} \quad \text{or,} \nonumber \\
+\frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \mathbf{u} + \mathbf{g}, \label{eq:NSE}
 \end{align}
 which along with the incompressibility condition, \eqref{eq:incomp}, are the Navier-Stokes equations. Notice that if $\nu = 0$, there is no interaction between fluids elements, and this reduces simply to Euler's equations, \eqref{eq:euler}. 
 
@@ -116,7 +113,7 @@ The Navier-Stokes equations are notoriously difficult to solve since it is a sec
 \end{align*}
 is the steady time average on some time scale $\tau$, and $\alpha_i'$ is the turbulent perturbations. It follows from this definition that
 \begin{align}
-\overline{\alpha_i'} = 0, \quad \frac{\partial \overline{\alpha_i}}{\partial t} = 0, \quad \overline{\overline{\alpha_i}} = \overline{\alpha_i}, \quad \text{and} \quad \overline{\frac{\partial \alpha_i}{\partial x_i}} =  \frac{\partial \overline{\alpha_i}}{\partial x_i}. \label{eq:RANSprop}
+\overline{\alpha_i'} = 0, \quad \frac{\partial \overline{\alpha_i}}{\partial t} = 0, \quad \overline{\overline{\alpha_i}} = \overline{\alpha_i}, \quad \text{and} \quad \overline{\frac{\partial \alpha_i}{\partial x_j}} =  \frac{\partial \overline{\alpha_i}}{\partial x_j}. \label{eq:RANSprop}
 \end{align}
 We can write \eqref{eq:NSE} in the more suggestive component form:
 \begin{align*}
@@ -124,14 +121,14 @@ We can write \eqref{eq:NSE} in the more suggestive component form:
 \end{align*}
 then, making the appropriate substitutions, taking the time average, and using the properties from  \eqref{eq:RANSprop}, we obtain
 \begin{align*}
-\sum_j \overline{u_j} \frac{\partial \overline{u_i}}{\partial x_j} + u_j' \frac{\partial u_i'}{\partial x_j} &= \sum_j  -\frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u_i}}{\partial x_j^2} + \overline{g_i}.
+\sum_j \overline{u_j} \frac{\partial \overline{u_i}}{\partial x_j} + \overline{u_j' \frac{\partial u_i'}{\partial x_j}} &= \sum_j  -\frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u_i}}{\partial x_j^2} + \overline{g_i}.
 \end{align*}
 Rewriting this in vector form gives the Reynolds-Averaged Navier-Stokes equation,
 \begin{align}
-\left( \bf{\overline{u}} \cdot \nabla \right) \bf{\overline{u}} + \left( \bf{u'} \cdot \nabla \right) \bf{u'}&= - \frac{1}{\rho} \nabla \overline{p} + \nu \nabla^2 \bf{\overline{u}} + \bf{\overline{g}}. \label{eq:RANS}
+\left( \mathbf{\overline{u}} \cdot \nabla \right) \mathbf{\overline{u}} + \overline{\left( \mathbf{u'} \cdot \nabla \right) \mathbf{u'}} &= - \frac{1}{\rho} \nabla \overline{p} + \nu \nabla^2 \mathbf{\overline{u}} + \mathbf{\overline{g}}. \label{eq:RANS}
 \end{align}
 
-\subsection{Spalart-Allmaras (SA) Turbulent Model}\label{subsec:saturb}
+\subsection{Spalart-Allmaras (SA) Turbulent Model}
 While \eqref{eq:RANS} makes fluid flow predictions easier, a model is still needed for $\nu$. According to the Boussinesq hypothesis \cite{Boussinesq}, an increase in the viscosity gives the effect of turbulence, and therefore $\nu = \overline{\nu} + \nu'$. One such way to model this altered viscosity and the turbulence, is the Spalart-Allmaras turbulence model. This model determines the turbulent viscosity using the following:
 \begin{align}
 \nu' = \hat{\nu} f_{v1}; \qquad f_{v1} = \frac{\chi^3}{\chi^3+c_{v1}^3}; \qquad \chi \equiv \frac{\hat{\nu}}{\overline{\nu}}.
@@ -139,35 +136,43 @@ While \eqref{eq:RANS} makes fluid flow predictions easier, a model is still need
 \end{align}
 Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}$ is obtained by solving the convection-diffusion equation,
 \begin{align*}
-\frac{\partial \hat{\nu}}{\partial t} = D \nabla^2 \hat{\nu} - \overline{\bf{u}} \nabla \hat{\nu},
+\frac{\partial \hat{\nu}}{\partial t} = D \nabla^2 \hat{\nu} - \overline{\mathbf{u}} \nabla \hat{\nu},
 \end{align*}
 where $D$ is the diffusivity.
 
 \section{Stanford University Unstructured ($SU^2$) Code}
-$c_{v1} = 7.1$ for \eqref{eq:saeq} \\
 
-Uses the SA turbulence model (\ref{subsec:saturb}) as well as the Menter Shear Stress Transport (SST) Model, however the SST model was not used in any of the simulations.
-
-\lipsum[1-2]
-
-\subsection{Mesh and Numerics}
-
-\begin{wrapfigure}{R}{0.5\textwidth}
+\begin{wrapfigure}{L}{0.45\textwidth}
 \centering
-\includegraphics[width = 0.5\textwidth]{Pictures/AirfoilMesh}
-\caption[Mesh of an Airfoil]{Mesh of an airfoil \cite{mesh}.}
+\includegraphics[width = 0.45\textwidth]{Pictures/AirfoilMesh}
+\caption[Mesh of an Airfoil]{Unstructured mesh of an airfoil \cite{mesh}.}
 \label{fig:airfoilmesh}
 \end{wrapfigure}
 
-Typically a particular node within the mesh will be surrounded by six triangular cells. Using the centroids of the cells, as well as the midpoints of the edges, we can construct a hexagonal region, $\Omega_i$. This leads to the discretized form of our PDE:
+The Stanford University Unstructured ($SU^2$) code is a relatively new, open source, constrained partial differential equation solver, optimized for computational fluid dynamics problems. It was initially developed by Francisco Palacios, Thomas Economon, and Juan Alonso from the Aerospace Design Laboratory of the Department of Aeronautics and Astronautics at Stanford University. $SU^2$ is written mostly in C++; and because it is open source, the capabilities have since been extended by many teams of developers from around the world, in addition to the team at Stanford University. \\
+
+$SU^2$ was initially developed under the philosophy that it should remain open source, portable, and highly encapsulated while operating at a high performance standard. The code uses only widely available libraries and dependencies for C++ and Python; furthermore, it is written at a very high, abstract level to minimize disc space, and maximize performance. This philosophy was used to eliminate many of the problems other computational fluid dynamics software are plagued with such as price, compatibility, and memory  \cite{su2main}. Some of the features of the $SU^2$ code include, but are not limited to:
+\begin{itemize}
+\item Reynolds-Averaged Navier-Stokes equations \eqref{eq:RANS}
+\item Spalart-Allmaras Turbulence model \eqref{eq:saeq} ($c_{v1} = 7.1$ \cite{su2main} \cite{su2two})
+\item Menter Shear Stress Transport model (an alternative to the SA model)
+\item Compressible flows
+\item Wave equation, heat equation, and plasma equations
+\item Optimal shape design (i.e.\ Supersonic aircraft)
+\item Dynamic meshes
+\end{itemize}
+
+To conduct a simulation, two main files are required, the configuration file, and the mesh file. All of the parameters such as the fluid speed, Reynolds number, and governing equations are specified in the configuration file. The shape geometry of the problem is stored as an unstructured mesh -- hence the name -- in the mesh file, an example visualization is in Figure \ref{fig:airfoilmesh}. The mesh is unstructured in the sense that there is no algebraic relation between nodes. Instead, the mesh is specified by listing the node coordinates, and the adjacent nodes it is connected to. The density of nodes is greatest at the surface since it is the most complex area, and any errors could quickly propagate through the solution. \\
+
+Typically a particular node within the mesh will be surrounded by six triangular cells. Using the centroids of the cells, as well as the midpoints of the edges, we can construct a hexagonal region, $\Omega_i$, which surrounds the $i$th node. Our partial differential equations can be discretized by 
 \begin{equation*}
-\int_{\Omega_i} \frac{\partial \bf{u}}{\partial t} d\Omega + R_i(\textbf{u}) = 0
+\int_{\Omega_i} \frac{\partial \mathbf{u}}{\partial t} d\Omega + R_i(\mathbf{u}) = 0
 \end{equation*}
-where $R_i(\bf{u})$ is the residual.
+where $R_i(\mathbf{u})$ is the residual. After the spacial components have been discretized, the governing equations can be numerically solved with a variety of methods and optimizations. Furthermore, due to the way the solution is discretized, the mesh can dynamically be updated; this is a key feature in the shape optimization process.
 
 \section{Scripting and Automation}
 
-Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots. The $SU^2$ code natively writes to the data files in the format used for Tecplot, a visualization and analysis tool for computational fluid dynamics \cite{tecplot}. Since Tecplot was not used, a Wolfram function was needed to convert the data to a form Mathematica could use. Once the data was in a usable form, the \texttt{ListDensityPlot} function was used to create the images. The function to tidy the data along with the plotting function were combined into a Wolfram script such as Figure \ref{fig:script}, which can be executed from the terminal. To fully automate the image generation, a shell script was written to iterate over each data file.
+Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots. The $SU^2$ code natively writes to the data files in the format used for Tecplot\footnote{http://www.tecplot.com/}, a visualization and analysis tool for computational fluid dynamics \cite{tecplot}. Since Tecplot was not used, a Wolfram function was needed to convert the data to a form Mathematica could use. Once the data was in a usable form, the \texttt{ListDensityPlot} function was used to create the images. The function to tidy the data along with the plotting function were combined into a Wolfram script such as Figure \ref{fig:script}, which can be executed from the terminal. To fully automate the image generation, a shell script was written to iterate over each data file.
 
 \begin{figure}[p]
 \lstinputlisting[breaklines=true, label=makecontour]{MakeContour.m}
@@ -282,12 +287,16 @@ The equation \eqref{eq:euler} is interesting.
 \begin{thebibliography}{9}
 
 \bibitem{su2main} %Main SU2 paper used for reference
-Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \\
-\emph{Stanford University Unstructured ($SU^2$): An open-source integrated computational environment for multi-physics simulation and design}, \\
-51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition. 
+Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \emph{Stanford University Unstructured ($SU^2$): An open-source integrated computational environment for multi-physics simulation and design}, 51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition, 2013.
+
+\bibitem{su2two} %The other paper
+Francisco Palacios, Thomas D. Economon, Aniket Aranake, Sean R. Copeland, Amrita K. Lonkar, Trent W. Lukaczyk, David E. Manosalvas, Kedar R. Naik, Santiago Padron, Brendan Tracey, Anil Variyar, and Juan J. Alonso, \emph{Stanford University Unstructured ($SU^2$): Open-source Analysis and Design Technology for Turbulent Flows}, 52nd Aerospace Sciences Meeting. National Harbor, Maryland, 2014.
+
+\bibitem{textbook}
+John D. Anderson, Jr, \emph{Computational Fluid Dynamics}, McGraw-Hill, Inc., 1995.
 
 \bibitem{Boussinesq} %Increased viscosity -> turbulence
-D.C. Wilcox. \emph{Turbulence Modeling for CFD}. 2nd Ed., DCWIndustries, Inc., 1998.
+D.C. Wilcox, \emph{Turbulence Modeling for CFD}. 2nd Ed., DCWIndustries, Inc., 1998.
 
 \bibitem{syntax} %Mathematica syntax highlighting
 Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highlighting Mathematica code in \LaTeX document, URL: http://mathematica.stackexchange.com/a/83811
@@ -297,9 +306,6 @@ https://github.com/su2code/SU2/wiki/Quick-Start
 
 \bibitem{aeroplane} %Image of aeroplane CFD simulation
 http://news.stanford.edu/news/2012/january/aero-engineering-software-012412.html
-
-\bibitem{tecplot}
-http://www.tecplot.com/
 
 \end{thebibliography}
 
