@@ -79,6 +79,8 @@ numbers=left,
 literate={->}{$\rightarrow{}$}{1}
 }
 
+\captionsetup[subfigure]{width=0.9\textwidth}
+
 \title{Computational Fluid Dynamics \\ \large using the SU$^2$ Code}
 \author{Brady Metherall \and 100516905}
 \date{Monday April 4, 2016}
@@ -256,36 +258,39 @@ The second simulation was of a pitching airfoil, the angle continuously varied f
 
 \subsection{Steady Flow Around a Static Cylinder}
 
-boundary layer \\
-\lipsum[1]
+In our second simulation, we sought out to compare how the different governing equations, Euler's and Navier-Stokes, effects the flow past a static cylinder. The key difference in the two parts of the simulation was the viscosity, the Euler simulation was inviscid, whereas the Navier-Stokes simulation used a Reynolds number of 20000, the full  details can be found in Table \ref{tab:static}, and the results are shown in Figure \ref{fig:static}. \\
+
+A thought-provoking property of the Euler simulation (Figure \ref{fig:staticeuler}) is that the results are completely symmetric, both the streamlines, as well as the velocity profile. While this agrees with theory, it is still fascinating that the direction of flow cannot be determined. Another interesting property to note is the lack of a boundary layer (Figure \ref{fig:eulerboundary}). On the boundary of the cylinder for a non-viscous fluid, the fluid has the greatest velocity at the boundary, and gradually decreases as the distance to the boundary increases. \\
+
+Conversely, we see neither of these properties for a viscous fluid. We instead observe a tail behind the cylinder of reduced velocity (Figure \ref{fig:staticNS}), as the fluid crashes into the front of the cylinder it is pushed outward, created the region of very low velocity. Furthermore, it is clear in Figure \ref{fig:nsboundary} that a boundary layer forms on the surface of the cylinder. This is a characteristic of all viscous flows, and is known as the no-slip condition. The fluid that is against the boundary gets `stuck' and has a velocity of zero. After the boundary layer we observe a similar situation to the Euler simulation, except the peak velocity is no longer in the area of the cylinder that is perpendicular to the flow, it is shifted leftwards toward the incoming fluid.
 
 \begin{figure}[htbp]
 \centering
-\begin{subfigure}[t]{0.5\linewidth}
+\begin{subfigure}[t]{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder}
-  \caption{Euler}
+  \caption{Euler's equation simulation results.}
   \label{fig:staticeuler}
 \end{subfigure}%
-\begin{subfigure}[t]{0.5\linewidth}
+\begin{subfigure}[t]{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder_NS}
-  \caption{NS}
+  \caption{Navier-Stokes simulation results.}
   \label{fig:staticNS}
 \end{subfigure} \\
-\begin{subfigure}[t]{0.5\linewidth}
+\begin{subfigure}[t]{0.5\textwidth}
  \centering
  \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder_Boundary}
- \caption{Boundaries are slippery.}
+ \caption{No boundary layer forms for an inviscid fluid, and the flow speed is the fastest at the boundary.}
  \label{fig:eulerboundary}
 \end{subfigure}%
-\begin{subfigure}[t]{0.5\linewidth}
+\begin{subfigure}[t]{0.5\textwidth}
  \centering
  \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder_Boundary_NS}
- \caption{The boundary layer that forms due to a viscous fluid.}
+ \caption{For a viscous fluid, a boundary layer is formed and the flow speed quickly decreases to zero.}
  \label{fig:nsboundary}
 \end{subfigure}
-\caption[Static Cylinder]{Static Cylinders}
+\caption[Static Cylinder Results]{Results of the static cylinder experiments.}
 \label{fig:static}
 \end{figure}
 
@@ -317,12 +322,10 @@ boundary layer \\
  Total Time & 1.200 s \\ \hline
 \end{tabular*}
 \caption[Turbulent Static Cylinder Simulation Parameters]{Parameters used in the turbulent flow simulations. Results shown in Figures \ref{fig:vortexanimation}, and \ref{fig:vortexstill}.}
-\label{tab:static}
+\label{tab:vortex}
 \end{wraptable}
 
 \subsection{Turbulent Cylinder -- Vortex Shedding}
-
-The equation \eqref{eq:euler} is interesting.
 
 \begin{figure}[htbp]
 \centering
