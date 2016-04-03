@@ -56,7 +56,6 @@ literate={->}{$\rightarrow{}$}{1}
 \lstset{language=myMMA}
 
 \listoffigures
-
 \listoftables
 
 \section{Introduction}
@@ -64,18 +63,15 @@ literate={->}{$\rightarrow{}$}{1}
 \begin{wrapfigure}{R}{0.45\textwidth}
 \centering
 \includegraphics[width = 0.45\textwidth]{Pictures/aero}
-\caption[Possibilities with CFD]{Possibilities with CFD \cite{aeroplane}}
+\caption[Example of Computational Fluid Dynamics Applications]{Computational fluid dynamics has a wide range of applications, passenger aircraft for instance \cite{aeroplane}.}
 \label{fig:aeroplane}
 \end{wrapfigure}
 
-CFD joins theory and experiment as third subfield \\
-CFD is like a wind tunnel but cheaper and faster \\
-reshaping \\
-changing Re, Mach, P ... \\
-portable / remote access \\
+Before the invention of high speed computers, and GPU computing, fluid dynamics was a two discipline field -- theoretical, and experimental. However, over the past few decades, a new discipline has emerged, computational fluid dynamics. Computational fluid dynamics has grown to an equal footing with the other two sub-fields, although, it will never be a replacement.  Computational fluid dynamics is essentially a perfect wind tunnel; both give important information about the fluid flow around a shape such as an airplane, both allow parameters such as the Reynolds number, temperature, or flow speed to be changed, and both are an effective way to optimize the aerodynamics of an object. Where computational fluid dynamics pulls ahead of wind tunnels is its cost, speed, ease of use, and range of operation. Changing the Reynolds number, or temperature in a computational fluid dynamics experiment is as easy as typing in a new number; it's not quite this simple in a wind tunnel. Furthermore, computational fluid dynamics has the ability to provide a broader range of data; as well as simulate impractical situations to test in a wind tunnel, such as the extreme speeds and temperatures a sub-orbital spacecraft would experience. Computational fluid dynamics experiments can even be done from anywhere in the world, by anyone via remote access. \\
 
-\lipsum[1-2]
-\newpage
+Computational fluid dynamics has a wide variety of applications even today. There are some things that only computational fluid dynamics simulations can predict, such as how molten iron will flow into a mold in a manufacturing plant. Computational fluid dynamics plays an important role in other areas as well including improving fuel efficiency of automobiles, optimizing pumps and turbines in dams, and even testing naval submarines and torpedoes. Computational fluid dynamics plays a very important role in many areas of physics and engineering, and is currently a vital area of research. \\
+
+In this project we run basic computational fluid dynamics simulations for two dimensional flows. The Stanford University Unstructured (SU$^2$) code was used to run both laminar and turbulent simulations. We first examine some background theory, and numerical simplifications; our first experiment looks at a classic airfoil. Then a static cylinder using both Euler's equations as well as the Navier-Stokes equations was simulated. Finally, we experimented with turbulent flow past a static cylinder and observed vortex shedding and von K\'{a}rm\'{a}n vortex streets.
 
 \section{Theory}
 \subsection{Non-Turbulent Flow Equations}
