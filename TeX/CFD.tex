@@ -10,8 +10,6 @@
 \usepackage{subcaption}
 \usepackage{hyperref}
 
-\usepackage{lipsum}
-
 % http://tex.stackexchange.com/questions/258501/how-to-make-a-combined-list-of-figures-and-tables
 % Based on `tocloft` package
 \usepackage[titles]{tocloft}
@@ -187,7 +185,7 @@ The Stanford University Unstructured (SU$^2$) code\footnote{\url{http://su2.stan
 SU$^2$ was initially developed under the philosophy that it should remain open source, portable, and highly encapsulated while operating at a high performance standard. The code uses only widely available libraries and dependencies for C++ and Python; furthermore, it is written at a very high, abstract level to minimize disc space, and maximize performance. This philosophy was used to eliminate many of the problems other computational fluid dynamics software are plagued with such as price, compatibility, and memory  \cite{su2main}. Some of the features of the SU$^2$ code include, but are not limited to:
 \begin{itemize}
 \item Reynolds-Averaged Navier-Stokes equations \eqref{eq:RANS}
-\item Spalart-Allmaras Turbulence model \eqref{eq:saeq} ($c_{v1} = 7.1$ \cite{su2main} \cite{su2two})
+\item Spalart-Allmaras turbulence model \eqref{eq:saeq} ($c_{v1} = 7.1$ \cite{su2main} \cite{su2two})
 \item Menter Shear Stress Transport model (an alternative to the SA model)
 \item Compressible flows
 \item Wave equation, heat equation, and plasma equations
@@ -334,7 +332,7 @@ Conversely, we see neither of these properties for a viscous fluid. We instead o
 \label{fig:vortexanimation}
 \end{figure}
 
-Our final experiment was similar to the static cylinder simulation, however, using the Spalart-Allmaras Turbulence model. The Reynolds number was the same as the prior simulation, and a time step of 0.0006s was used, the remaining configuration options are  shown in Table \ref{tab:vortex}. Initially, we obtained the same results as in Figure \ref{fig:staticNS}, as expected. However, around the 200th iteration, or 0.1200s, the first vortex is shed. Following this, vortices were alternatingly shed from the top and bottom of the back of the cylinder, and were swept away by the fluid, allowing a new vortex to be formed. An animation of this process can be seen in Figure \ref{fig:vortexanimation}. \\
+Our final experiment was similar to the static cylinder simulation, however, using the Spalart-Allmaras turbulence model. The Reynolds number was the same as the prior simulation, and a time step of 0.0006s was used, the remaining configuration options are  shown in Table \ref{tab:vortex}. Initially, we obtained the same results as in Figure \ref{fig:staticNS}, as expected. However, around the 200th iteration, or 0.1200s, the first vortex is shed. Following this, vortices were alternatingly shed from the top and bottom of the back of the cylinder, and were swept away by the fluid, allowing a new vortex to be formed. An animation of this process can be seen in Figure \ref{fig:vortexanimation}. \\
 
 The von K\'{a}rm\'{a}n vortex street is initiated by perturbations in the steady state solution from the turbulence. The vortices are periodically shed in the same fashion to Figure \ref{fig:vortexanimation} for the remainder of the simulation, a total of 2000 iterations. The period of the vortex shedding is 112 iterations, which gives $T = 0.0672$ s, and $f = 14.88$ Hz. The formation of the vortices can more easily be seen in Figure \ref{fig:vortexstill}.
 
@@ -363,9 +361,13 @@ The von K\'{a}rm\'{a}n vortex street is initiated by perturbations in the steady
 \label{fig:vortexstill}
 \end{figure}
 
+\newpage
+
 \section{Conclusion}
 
-\lipsum[5-7]
+This project examined the theory behind fluid dynamics, as well as numerical simplifications that can be made to optimize the computation. To acquire the visualizations, a Wolfram script along with Wolfram Mathematica was used to parse the data files and create the graphics. The preliminary results in this project are in agreement with the theoretical predictions. SU$^2$ is a viable computational fluid dynamics simulator -- only a small set of its capabilities were used in this project. We were able to simulate a von K\'{a}rm\'{a}n vortex street behind a static cylinder using the Navier-Stokes equations, and the Spalart-Allmaras turbulence model. Computational fluid dynamics is now a critical discipline of fluid dynamics, and it is only going to become more indispensable as computers become faster, and the numerical algorithms become more optimized.
+
+\newpage
 
 \begin{thebibliography}{9}
 
