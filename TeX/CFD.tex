@@ -1,7 +1,6 @@
 \documentclass[10pt, titlepage]{article}
 \usepackage[english]{babel}
 \usepackage{amsmath}
-\usepackage{color}
 \usepackage{amsfonts}
 \usepackage{xcolor,graphicx}
 \usepackage{geometry}
@@ -46,8 +45,7 @@ numbers=left,
 literate={->}{$\rightarrow{}$}{1}
 }
 
-
-\title{Computational Fluid Dynamics \\ \large with the $SU^2$ Code}
+\title{Computational Fluid Dynamics \\ \large using the SU$^2$ Code}
 \author{Brady Metherall \and 100516905}
 \date{Monday April 4, 2016}
 
@@ -58,6 +56,8 @@ literate={->}{$\rightarrow{}$}{1}
 \lstset{language=myMMA}
 
 \listoffigures
+
+\listoftables
 
 \section{Introduction}
 
@@ -82,19 +82,19 @@ portable / remote access \\
 
 Non-viscous, ideal fluids obey two equations of motion collectively called Euler's equations. The first is the incompressibility condition 
 \begin{align}
-\nabla \cdot \mathbf{u} &= 0
+\nabla \cdot \mathbf{u} &= 0,
 \label{eq:incomp}
 \end{align}
-which arises by assuming the volume of a fluid element, as well as it's density is constant. The second equation can be derived from Newton's second law, 
+which arises by assuming the volume of a fluid element, as well as its density are constant. The second equation,
 \begin{align}
-\frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} &= - \frac{1}{\rho} \nabla p + \mathbf{g}. \label{eq:euler}
+\frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} &= - \frac{1}{\rho} \nabla p + \mathbf{g}, \label{eq:euler}
 \end{align}
-The problem with Euler's equations is that they are only applicable for non-viscous fluids, which is not very practical. One of the subtler details is that the force experienced by a fluid element is always normal to it's surface. However, due to the fluid elements interacting, tangential forces arise. Cauchy's equation,
+can be derived from Newton's second law. The problem with Euler's equations is that they are only applicable for non-viscous fluids, which is not very practical. One of the subtler details is that the force experienced by a fluid element is always normal to its surface. However, due to the fluid elements interacting, tangential forces arise. Cauchy's equation,
 \begin{align}
-\rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) &= \nabla \cdot \mathbf{T} + \rho \mathbf{g}
+\rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) &= \nabla \cdot \mathbf{T} + \rho \mathbf{g},
 \label{eq:cauchy}
 \end{align}
-adds a stress tensor to handle theses additional forces. If we chose $\mathbf{T}_{ij} = -p \delta_{ij}$ we simply get \eqref{eq:euler}, as expected, however, if we chose a more complex tensor with a deformation term, such as
+adds a stress tensor to handle these additional forces. If we chose $T_{ij} = -p \delta_{ij}$ we simply get \eqref{eq:euler}, as expected, however, if we chose a more complex tensor with a deformation term, such as
 \begin{align*}
 T_{ij} = -p \delta_{ij} + \mu \left( \frac{\partial u_j}{\partial x_i} + \frac{\partial u_i}{\partial x_j} \right),
 \end{align*}
@@ -103,10 +103,10 @@ T_{ij} = -p \delta_{ij} + \mu \left( \frac{\partial u_j}{\partial x_i} + \frac{\
 \rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) &= - \nabla p + \mu \nabla^2 \mathbf{u} + \rho \mathbf{g} \quad \text{or,} \nonumber \\
 \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} &= - \frac{1}{\rho} \nabla p + \nu \nabla^2 \mathbf{u} + \mathbf{g}, \label{eq:NSE}
 \end{align}
-which along with the incompressibility condition, \eqref{eq:incomp}, are the Navier-Stokes equations. Notice that if $\nu = 0$, there is no interaction between fluids elements, and this reduces simply to Euler's equations, \eqref{eq:euler}. 
+which along with the incompressibility condition, \eqref{eq:incomp}, are the Navier-Stokes equations. Notice that if $\nu = 0$, there is no interaction between fluid elements, and this reduces simply to Euler's equations, \eqref{eq:euler}. 
 
 \subsection{Reynolds-Averaged Navier-Stokes (RANS) Equation}
-The Navier-Stokes equations are notoriously difficult to solve since it is a second order partial differential equation, with three components, and four dependencies each. To make solving the Navier-Stokes equations easier, especially for turbulent flows, we can assume the flow is the superposition of the steady, and turbulent flows, and then take the time average. We can make the following variable substitutions
+The Navier-Stokes equations are notoriously difficult to solve since it is a second order partial differential equation, with three components, and four dependencies each. To make solving the Navier-Stokes equations easier, especially for turbulent flows, we can assume the flow is the superposition of the steady, and turbulent flows, and then take the time average. We can make the following variable substitutions:
 \begin{align*}
 \alpha_i &\equiv \overline{\alpha_i} + \alpha_i', \\
 \text{where } \overline{\alpha_i} &= \frac{1}{\tau} \int_0^\tau \alpha_i dt
@@ -140,7 +140,7 @@ Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}
 \end{align*}
 where $D$ is the diffusivity.
 
-\section{Stanford University Unstructured ($SU^2$) Code}
+\section{Stanford University Unstructured (SU$^2$) Code}
 
 \begin{wrapfigure}{L}{0.45\textwidth}
 \centering
@@ -149,9 +149,9 @@ where $D$ is the diffusivity.
 \label{fig:airfoilmesh}
 \end{wrapfigure}
 
-The Stanford University Unstructured ($SU^2$) code is a relatively new, open source, constrained partial differential equation solver, optimized for computational fluid dynamics problems. It was initially developed by Francisco Palacios, Thomas Economon, and Juan Alonso from the Aerospace Design Laboratory of the Department of Aeronautics and Astronautics at Stanford University. $SU^2$ is written mostly in C++; and because it is open source, the capabilities have since been extended by many teams of developers from around the world, in addition to the team at Stanford University. \\
+The Stanford University Unstructured (SU$^2$) code\footnote{\url{http://su2.stanford.edu/}} is a relatively new, open source, constrained partial differential equation solver, optimized for computational fluid dynamics problems. It was initially developed by Francisco Palacios, Thomas Economon, and Juan Alonso from the Aerospace Design Laboratory of the Department of Aeronautics and Astronautics at Stanford University. SU$^2$ is written mostly in C++; and because it is open source, the capabilities have since been extended by many teams of developers from around the world, in addition to the team at Stanford University. \\
 
-$SU^2$ was initially developed under the philosophy that it should remain open source, portable, and highly encapsulated while operating at a high performance standard. The code uses only widely available libraries and dependencies for C++ and Python; furthermore, it is written at a very high, abstract level to minimize disc space, and maximize performance. This philosophy was used to eliminate many of the problems other computational fluid dynamics software are plagued with such as price, compatibility, and memory  \cite{su2main}. Some of the features of the $SU^2$ code include, but are not limited to:
+SU$^2$ was initially developed under the philosophy that it should remain open source, portable, and highly encapsulated while operating at a high performance standard. The code uses only widely available libraries and dependencies for C++ and Python; furthermore, it is written at a very high, abstract level to minimize disc space, and maximize performance. This philosophy was used to eliminate many of the problems other computational fluid dynamics software are plagued with such as price, compatibility, and memory  \cite{su2main}. Some of the features of the SU$^2$ code include, but are not limited to:
 \begin{itemize}
 \item Reynolds-Averaged Navier-Stokes equations \eqref{eq:RANS}
 \item Spalart-Allmaras Turbulence model \eqref{eq:saeq} ($c_{v1} = 7.1$ \cite{su2main} \cite{su2two})
@@ -159,74 +159,98 @@ $SU^2$ was initially developed under the philosophy that it should remain open s
 \item Compressible flows
 \item Wave equation, heat equation, and plasma equations
 \item Optimal shape design (i.e.\ Supersonic aircraft)
-\item Dynamic meshes
+\item Dynamic meshes \\
 \end{itemize}
 
 To conduct a simulation, two main files are required, the configuration file, and the mesh file. All of the parameters such as the fluid speed, Reynolds number, and governing equations are specified in the configuration file. The shape geometry of the problem is stored as an unstructured mesh -- hence the name -- in the mesh file, an example visualization is in Figure \ref{fig:airfoilmesh}. The mesh is unstructured in the sense that there is no algebraic relation between nodes. Instead, the mesh is specified by listing the node coordinates, and the adjacent nodes it is connected to. The density of nodes is greatest at the surface since it is the most complex area, and any errors could quickly propagate through the solution. \\
 
 Typically a particular node within the mesh will be surrounded by six triangular cells. Using the centroids of the cells, as well as the midpoints of the edges, we can construct a hexagonal region, $\Omega_i$, which surrounds the $i$th node. Our partial differential equations can be discretized by 
 \begin{equation*}
-\int_{\Omega_i} \frac{\partial \mathbf{u}}{\partial t} d\Omega + R_i(\mathbf{u}) = 0
+\int_{\Omega_i} \frac{\partial \mathbf{u}}{\partial t} d\Omega + R_i(\mathbf{u}) = 0,
 \end{equation*}
 where $R_i(\mathbf{u})$ is the residual. After the spacial components have been discretized, the governing equations can be numerically solved with a variety of methods and optimizations. Furthermore, due to the way the solution is discretized, the mesh can dynamically be updated; this is a key feature in the shape optimization process.
 
 \section{Scripting and Automation}
 
-Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots. The $SU^2$ code natively writes to the data files in the format used for Tecplot\footnote{http://www.tecplot.com/}, a visualization and analysis tool for computational fluid dynamics \cite{tecplot}. Since Tecplot was not used, a Wolfram function was needed to convert the data to a form Mathematica could use. Once the data was in a usable form, the \texttt{ListDensityPlot} function was used to create the images. The function to tidy the data along with the plotting function were combined into a Wolfram script such as Figure \ref{fig:script}, which can be executed from the terminal. To fully automate the image generation, a shell script was written to iterate over each data file.
+Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots. The SU$^2$ code natively writes to the data files in the format used for Tecplot\footnote{\url{http://www.tecplot.com/}}, a visualization and analysis tool for computational fluid dynamics. Since Tecplot was not used, a Wolfram function was needed to convert the data to a form Mathematica could use. Once the data was in a usable form, the \texttt{ListDensityPlot} function was used to create the images. The function to tidy the data along with the plotting function were combined into a Wolfram script such as Figure \ref{fig:script}, which can be executed from the terminal. To fully automate the image generation, a shell script was written to iterate over each data file.
 
 \begin{figure}[p]
-\lstinputlisting[breaklines=true, label=makecontour]{MakeContour.m}
+\lstinputlisting[breaklines=true]{MakeContour.m}
 \caption[Automated Wolfram Script]{The Wolfram script used to generate Figure \ref{fig:airfoilanimation}. Syntax highlighting modified from \cite{syntax}.}
 \label{fig:script}
 \end{figure}
 
+\newpage
 \section{Results}
-\lipsum[1-2]
 
 \subsection{Airfoil}
-\lipsum[4-7]
-
-\begin{figure}
-\begin{subfigure}{0.5\linewidth}
-\centering
-\includegraphics[width=\textwidth]{./Pictures/Airfoil}
-\caption{Airfoil no turbulence.}
-\label{airfoil}
-\end{subfigure}
-\begin{subfigure}{0.5\textwidth}
-\centering
-\animategraphics[loop, width = \textwidth, autoplay]{12}{Airfoil_Animation_Turb/Airfoil_Turb}{0050}{0074}
-\caption{Pitching airfoil, with velocity contours.}
-\label{fig:airfoilanimation}
-\end{subfigure}
-\caption[Turbulent Airfoil Animation, and Laminar Airfoil Streamlines]{Airfoil things.}
-\end{figure}
-
-\subsection{Steady Flow Around a Static Cylinder}
-\lipsum[1-2]
 
 \begin{figure}[htbp]
-\begin{subfigure}{0.5\linewidth}
+\begin{subfigure}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=\textwidth]{./Pictures/Airfoil}
+\caption{Steady Euler simulation of an airfoil.}
+\label{fig:staticairfoil}
+\end{subfigure}
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\animategraphics[loop, width = \textwidth, autoplay]{12}{Airfoil_Animation_Turb/Airfoil_Turb}{0050}{0074}
+\caption{Turbulent Navier-Stokes simulation of a pitching airfoil, with velocity contours.}
+\label{fig:airfoilanimation}
+\end{subfigure}
+\caption[Turbulent Airfoil Animation, and Laminar Airfoil Streamlines]{Results of the airfoil simulations.}
+\label{fig:airfoil}
+\end{figure}
+
+\begin{wraptable}{R}{0.5\linewidth}
+\centering
+\begin{tabular*}{.5\textwidth}{@{\extracolsep{\fill}} | l | c | c |}
+ \hline
+ & 5.0$^{\circ}$ Angle & Pitching \\ \hline
+ Method & Euler & Navier-Stokes \\
+ Turbulence & None & Spalart-Allmaras \\
+ Flow Speed & 270 ms$^{-1}$ & 270 ms$^{-1}$ \\
+ Reynolds Number & 0 & 12560000 \\
+ Temperature & 300.0 K & 300.0 K \\
+ Pressure & 1 atm & N/A \\
+ Iterations & 250 & 25 per frame \\ \hline 
+\end{tabular*}
+\caption[Airfoil Simulation Parameters]{Parameters used in the airfoil simulations. Results shown in Figure \ref{fig:airfoil}.}
+\label{tab:airfoil}
+\end{wraptable}
+
+A NACA 0012 airfoil is the first tutorial in the Quick Start section of the documentation \cite{mesh}. This series of airfoils was developed by the National Advisory Committee for Aeronautics (NACA); for this particular case 0012 is the code for a symmetric airfoil with a thickness 12\% of its length. As this is the first tutorial it walks the user through the process of configuring, and running SU$^2$ for the first time after it is installed -- a natural place to start. In the first simulation Euler's equations were used to simulate an airfoil during takeoff. The full specifications of both simulations can be found in Table \ref{tab:airfoil}; this simulation took approximately 45 seconds to complete. Figure \ref{fig:staticairfoil} shows the streamlines, and velocity of the air around the airfoil from the data. It is clear from the data that due to the shape of the airfoil, the velocity of the air that flows over the wing of an aircraft is greatly increased compared to the air that flows under. A consequence of this increase in velocity is a decrease in pressure, which in turn provides lift for the aircraft. \\
+
+The second simulation was of a pitching airfoil, the angle continuously varied from $-4.0^{\circ}$ to $4.0^{\circ}$ -- unlike the first simulation where the angle was a constant $5.0^{\circ}$. Furthermore, the Navier-Stokes equations with turbulence were used. Figure \ref{fig:airfoilanimation} shows the results of the simulation; using a viscous turbulent flow, such as real aircraft experience, there is  undoubtedly a long turbulent stream off of the tail end of the airfoil. Another interesting property is that some of the velocity contours initially form in two distinct areas, and the come together as the airfoil flattens out.
+
+\subsection{Steady Flow Around a Static Cylinder}
+
+boundary layer \\
+\lipsum[1]
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[t]{0.5\linewidth}
   \centering
-  \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder}
+  \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder}
   \caption{Euler}
   \label{fig:staticeuler}
-\end{subfigure}
-\begin{subfigure}{0.5\linewidth}
+\end{subfigure}%
+\begin{subfigure}[t]{0.5\linewidth}
   \centering
-  \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_NS}
+  \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder_NS}
   \caption{NS}
   \label{fig:staticNS}
 \end{subfigure} \\
-\begin{subfigure}{0.5\linewidth}
+\begin{subfigure}[t]{0.5\linewidth}
  \centering
- \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Boundary}
- \caption{No-slip condition.}
+ \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder_Boundary}
+ \caption{Boundaries are slippery.}
  \label{fig:eulerboundary}
-\end{subfigure}
-\begin{subfigure}{0.5\linewidth}
+\end{subfigure}%
+\begin{subfigure}[t]{0.5\linewidth}
  \centering
- \includegraphics[width=\textwidth]{./Pictures/Static_Cylinder_Boundary_NS}
+ \includegraphics[width=0.9\textwidth]{./Pictures/Static_Cylinder_Boundary_NS}
  \caption{The boundary layer that forms due to a viscous fluid.}
  \label{fig:nsboundary}
 \end{subfigure}
@@ -234,23 +258,48 @@ Throughout this project Wolfram Mathematica 10.1.0 for Linux x86 was used to sif
 \label{fig:static}
 \end{figure}
 
-%\begin{figure}[htb]
-%\centering
-%\includegraphics[width=0.6\textwidth]{./Pictures/Static_Cylinder_NS_Boundary}
-%\caption[Boundary Layer Due to Viscous Flow]{The boundary layer that forms due to a viscous fluid.}
-%\label{fig:boundary}
-%\end{figure}
+\begin{wraptable}{R}{0.5\linewidth}
+\centering
+\begin{tabular*}{.5\textwidth}{@{\extracolsep{\fill}} | l | c | c |}
+ \hline
+ Method & Euler & Navier-Stokes \\ \hline
+ Turbulence & None & None \\
+ Flow Speed & 75 ms$^{-1}$ & 75 ms$^{-1}$ \\
+ Reynolds Number & 0 & 20000 \\
+ Temperature & 300.0 K & 300.0 K \\
+ Pressure & 1 atm & N/A \\
+ Iterations & 250 & 250 \\ \hline
+\end{tabular*}
+\caption[Non-Turbulent Static Cylinder Simulation Parameters]{Parameters used in the non-turbulent flow simulations. Results shown in Figure \ref{fig:static}.}
+\label{tab:static}
+\vspace{\baselineskip}
+\begin{tabular*}{.5\textwidth}{@{\extracolsep{\fill}} | l | c |}
+ \hline
+ Method & Navier-Stokes \\ \hline
+ Turbulence & Spalart-Allmaras \\
+ Flow Speed & 75 ms$^{-1}$ \\
+ Reynolds Number & 20000 \\
+ Temperature & 300.0 K \\
+ Time Step & 0.0006 s \\
+ Iterations per Time Step & 10 \\
+ Total Iterations & 2000 \\
+ Total Time & 1.200 s \\ \hline
+\end{tabular*}
+\caption[Turbulent Static Cylinder Simulation Parameters]{Parameters used in the turbulent flow simulations. Results shown in Figures \ref{fig:vortexanimation}, and \ref{fig:vortexstill}.}
+\label{tab:static}
+\end{wraptable}
 
 \subsection{Turbulent Cylinder -- Vortex Shedding}
 
 The equation \eqref{eq:euler} is interesting.
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
 \centering
 \animategraphics[label=vortex, loop, width = \textwidth, autoplay]{12}{Vortex_Animation/Vortex_Shedding}{00}{26}
-\caption[Vortex Shedding Animation]{Neat! The full video can be found at \url{https://youtu.be/Zh5lWMpsCJg}}
-\label{vortexanimation}
+\caption[Vortex Shedding Animation]{Neat! The full video can be found at \url{https://youtu.be/1lBQNlEdXss}}
+\label{fig:vortexanimation}
 \end{figure}
+
 
 \lipsum[1-2]
 
@@ -276,7 +325,7 @@ The equation \eqref{eq:euler} is interesting.
   \caption{$t = \frac{3}{4}T$}
 \end{subfigure}
 \caption[Vortex Shedding at $\frac{1}{4}T$ increments]{Vortex shedding!}
-\label{fig:vortexshedding}
+\label{fig:vortexstill}
 \end{figure}
 
 \section{Conclusion}
@@ -287,10 +336,10 @@ The equation \eqref{eq:euler} is interesting.
 \begin{thebibliography}{9}
 
 \bibitem{su2main} %Main SU2 paper used for reference
-Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \emph{Stanford University Unstructured ($SU^2$): An open-source integrated computational environment for multi-physics simulation and design}, 51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition, 2013.
+Francisco Palacios, Juan Alonso, Karthikeyan Duraisamy, Michael Colonno, Jason Hicken, Aniket Aranake, Alejandro Campos, Sean Copeland, Thomas Economon, Amrita Lonkar, Trent Lukaczyk, and Thomas Taylor, \emph{Stanford University Unstructured (SU$^2$): An open-source integrated computational environment for multi-physics simulation and design}, 51st AIAA Aerospace Sciences Meeting including the New Horizons Forum and Aerospace Exposition, 2013.
 
 \bibitem{su2two} %The other paper
-Francisco Palacios, Thomas D. Economon, Aniket Aranake, Sean R. Copeland, Amrita K. Lonkar, Trent W. Lukaczyk, David E. Manosalvas, Kedar R. Naik, Santiago Padron, Brendan Tracey, Anil Variyar, and Juan J. Alonso, \emph{Stanford University Unstructured ($SU^2$): Open-source Analysis and Design Technology for Turbulent Flows}, 52nd Aerospace Sciences Meeting. National Harbor, Maryland, 2014.
+Francisco Palacios, Thomas D. Economon, Aniket Aranake, Sean R. Copeland, Amrita K. Lonkar, Trent W. Lukaczyk, David E. Manosalvas, Kedar R. Naik, Santiago Padron, Brendan Tracey, Anil Variyar, and Juan J. Alonso, \emph{Stanford University Unstructured (SU$^2$): Open-source Analysis and Design Technology for Turbulent Flows}, 52nd Aerospace Sciences Meeting. National Harbor, Maryland, 2014.
 
 \bibitem{textbook}
 John D. Anderson, Jr, \emph{Computational Fluid Dynamics}, McGraw-Hill, Inc., 1995.
@@ -299,13 +348,13 @@ John D. Anderson, Jr, \emph{Computational Fluid Dynamics}, McGraw-Hill, Inc., 19
 D.C. Wilcox, \emph{Turbulence Modeling for CFD}. 2nd Ed., DCWIndustries, Inc., 1998.
 
 \bibitem{syntax} %Mathematica syntax highlighting
-Belisarius (http://mathematica.stackexchange.com/users/29581/belisarius), Highlighting Mathematica code in \LaTeX document, URL: http://mathematica.stackexchange.com/a/83811
+Belisarius (\url{http://mathematica.stackexchange.com/users/29581/belisarius}), Highlighting Mathematica code in \LaTeX document, URL: \url{http://mathematica.stackexchange.com/a/83811}
 
 \bibitem{mesh} %Image of mesh
-https://github.com/su2code/SU2/wiki/Quick-Start
+\url{https://github.com/su2code/SU2/wiki/Quick-Start}
 
 \bibitem{aeroplane} %Image of aeroplane CFD simulation
-http://news.stanford.edu/news/2012/january/aero-engineering-software-012412.html
+\url{http://news.stanford.edu/news/2012/january/aero-engineering-software-012412.html}
 
 \end{thebibliography}
 

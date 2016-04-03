@@ -3,6 +3,7 @@
 *.pdf
 !CFD.pdf
 !Presentation.pdf
+Things_To_Do.txt
 *.png
 *.jpg
 *.dat
