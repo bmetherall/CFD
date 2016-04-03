@@ -330,12 +330,13 @@ Conversely, we see neither of these properties for a viscous fluid. We instead o
 \begin{figure}[htbp]
 \centering
 \animategraphics[label=vortex, loop, width = \textwidth, autoplay]{12}{Vortex_Animation/Vortex_Shedding}{00}{26}
-\caption[Vortex Shedding Animation]{Neat! The full video can be found at \url{https://youtu.be/1lBQNlEdXss}}
+\caption[Vortex Shedding Animation]{Animation of the vortex shedding. The full video can be found at \url{https://youtu.be/1lBQNlEdXss}}
 \label{fig:vortexanimation}
 \end{figure}
 
+Our final experiment was similar to the static cylinder simulation, however, using the Spalart-Allmaras Turbulence model. The Reynolds number was the same as the prior simulation, and a time step of 0.0006s was used, the remaining configuration options are  shown in Table \ref{tab:vortex}. Initially, we obtained the same results as in Figure \ref{fig:staticNS}, as expected. However, around the 200th iteration, or 0.1200s, the first vortex is shed. Following this, vortices were alternatingly shed from the top and bottom of the back of the cylinder, and were swept away by the fluid, allowing a new vortex to be formed. An animation of this process can be seen in Figure \ref{fig:vortexanimation}. \\
 
-\lipsum[1-2]
+The von K\'{a}rm\'{a}n vortex street is initiated by perturbations in the steady state solution from the turbulence. The vortices are periodically shed in the same fashion to Figure \ref{fig:vortexanimation} for the remainder of the simulation, a total of 2000 iterations. The period of the vortex shedding is 112 iterations, which gives $T = 0.0672$ s, and $f = 14.88$ Hz. The formation of the vortices can more easily be seen in Figure \ref{fig:vortexstill}.
 
 \begin{figure}
 \begin{subfigure}{\linewidth}
@@ -358,7 +359,7 @@ Conversely, we see neither of these properties for a viscous fluid. We instead o
   \includegraphics[height=0.17\paperheight]{./Pictures/Vortex_Shedding1684}
   \caption{$t = \frac{3}{4}T$}
 \end{subfigure}
-\caption[Vortex Shedding at $\frac{1}{4}T$ increments]{Vortex shedding!}
+\caption[Vortex Shedding at $\frac{1}{4}T$ Increments]{Vortex shedding in increments of $\frac{1}{4}T$.}
 \label{fig:vortexstill}
 \end{figure}
 
@@ -366,7 +367,6 @@ Conversely, we see neither of these properties for a viscous fluid. We instead o
 
 \lipsum[5-7]
 
-\newpage
 \begin{thebibliography}{9}
 
 \bibitem{su2main} %Main SU2 paper used for reference
