@@ -3,6 +3,8 @@
 *.pdf
 !CFD.pdf
 !Presentation.pdf
+!Notes.pdf
+Notes.tex
 Things_To_Do.txt
 *.png
 *.jpg
@@ -19,3 +21,5 @@ CFD.nb
 *.nav
 *.snm
 *.toc
+*.loft
+*.lot
