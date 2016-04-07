@@ -12,7 +12,7 @@
 
 \title{Computational Fluid Dynamics}
 \subtitle{using the SU$^2$ Code}
-\author{Brady Metherall \and 100516905}
+\author[Brady Metherall]{Brady Metherall \and 100516905}
 \date{Thursday April 7, 2016}
 
 \usetheme{Berkeley}
@@ -27,11 +27,9 @@
 \frame{
 \frametitle{Introduction}
 \begin{itemize}
-\item Over the past few decades, a new discipline of fluid dynamics has emerged, computational fluid dynamics.
-\item Computational fluid dynamics is essentially a perfect wind tunnel.
+\item A new discipline of fluid dynamics has emerged, computational fluid dynamics -- essentially a perfect wind tunnel.
 \item Advantages include cost, speed, ease of use, and range of operation.
-\item Furthermore, computational fluid dynamics has the ability to provide a broader range of data, as well as simulate impractical situations to test in a wind tunnel.
-\item Applications in many areas of physics and engineering.
+\item Computational fluid dynamics has the ability to provide a broader range of data, as well as simulate impractical situations to test in a wind tunnel.
 \end{itemize}
 }
 
@@ -42,7 +40,7 @@
 \begin{itemize}
 \item Incompressibility Condition: $\displaystyle \nabla \cdot \mathbf{u} = 0$
 
-\item Euler's Equations: $\displaystyle \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} = - \frac{1}{\rho} \nabla p + \mathbf{g}$
+\item Euler's Equation: $\displaystyle \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} = - \frac{1}{\rho} \nabla p + \mathbf{g}$
 
 \item Cauchy's Equation: $\displaystyle \rho \left( \frac{\partial \mathbf{u}}{\partial t} + \left( \mathbf{u} \cdot \nabla \right) \mathbf{u} \right) = \nabla \cdot \mathbf{T} + \rho \mathbf{g}$
 
@@ -62,7 +60,7 @@ To make solving the Navier-Stokes equations easier, especially for turbulent flo
 \text{where } \overline{\alpha_i} &= \frac{1}{\tau} \int_0^\tau \alpha_i dt \\
 \overline{\alpha_i'} = 0, \quad \frac{\partial \overline{\alpha_i}}{\partial t} = 0, \quad \overline{\overline{\alpha_i}} &= \overline{\alpha_i}, \quad \text{and} \quad \overline{\frac{\partial \alpha_i}{\partial x_i}} =  \frac{\partial \overline{\alpha_i}}{\partial x_i}
 \end{align*}
-Making the appropriate substitutions, taking the time average, and using the properties we obtain the Reynolds-Averaged Navier-Stokes equation,
+Making the appropriate substitutions, taking the time average, and using the properties, we obtain the Reynolds-Averaged Navier-Stokes equation,
 \begin{align*}
 \left( \mathbf{\overline{u}} \cdot \nabla \right) \mathbf{\overline{u}} + \overline{\left( \mathbf{u'} \cdot \nabla \right) \mathbf{u'}} = - \frac{1}{\rho} \nabla \overline{p} + \nu \nabla^2 \mathbf{\overline{u}} + \mathbf{\overline{g}} 
 \end{align*}
@@ -80,11 +78,7 @@ Making the appropriate substitutions, taking the time average, and using the pro
 \nu' = \hat{\nu} f_{v1}; \qquad f_{v1} = \frac{\chi^3}{\chi^3+c_{v1}^3}; \qquad \chi \equiv \frac{\hat{\nu}}{\overline{\nu}}.
 \label{eq:saeq}
 \end{align*}
-Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}$ is obtained by solving the convection-diffusion equation,
-\begin{align*}
-\frac{\partial \hat{\nu}}{\partial t} = D \nabla^2 \hat{\nu} - \overline{\mathbf{u}} \nabla \hat{\nu},
-\end{align*}
-where $D$ is the diffusivity.
+Assuming the flow is incompressible, and the diffusivity is constant, $\hat{\nu}$ is obtained by solving the convection-diffusion equation.
 }
 
 \section{SU$^2$ Code}
@@ -93,9 +87,8 @@ where $D$ is the diffusivity.
 \frametitle{SU$^2$ Code Development}
 \begin{itemize}
 \item The Stanford University Unstructured (SU$^2$) code is a relatively new, open source, constrained partial differential equation solver, optimized for computational fluid dynamics problems.
-\item It was initially developed by the Aerospace Design Laboratory of the Department of Aeronautics and Astronautics at Stanford University.
-\item SU$^2$ is written mostly in C++; and because it is open source, the capabilities have since been extended by many teams of developers from around the world.
-\item The developers believe that it should remain open source, portable, and highly encapsulated while operating at a high performance standard.
+\item Written mostly in C++.
+\item The capabilities have since been extended by many teams of developers from around the world.
 \end{itemize}
 }
 
@@ -114,12 +107,11 @@ Some of the features of the SU$^2$ code include, but are not limited to:
 }
 
 \frame{
-\frametitle{SU$^2$ Code}
+\frametitle{SU$^2$ Code File Types}
 \begin{itemize}
 \item All of the parameters such as the fluid speed, Reynolds number, and governing equations are specified in the configuration file.
 \item The shape geometry of the problem is stored as an unstructured mesh -- hence the name -- in the mesh file.
 \item The mesh is unstructured in the sense that there is no algebraic relation between nodes.
-\item Due to the way the solution is discretized, the mesh can dynamically be updated; this is a key feature in the shape optimization process of SU$^2$.
 \end{itemize}
 }
 
@@ -136,11 +128,9 @@ Some of the features of the SU$^2$ code include, but are not limited to:
 \frame{
 \frametitle{Scripting and Automation}
 \begin{itemize}
-\item Wolfram Mathematica 10.1.0 for Linux x86 was used to sift through the vast data files and extract the relevant information to produce the plots.
+\item Wolfram Mathematica was used to sift through the data files and extract the relevant information to produce the plots.
 \item A Wolfram function was needed to convert the data to a form Mathematica could use.
-\item Mathematica's \texttt{ListDensityPlot} function was used to create the images.
-\item The function to tidy the data along with the plotting function were combined into a Wolfram script which can be executed from the terminal.
-\item  To fully automate the image generation, a shell script was written to iterate over each data file.
+\item This function along with the plotting function were combined into a Wolfram script which can be executed from the terminal.
 \end{itemize}
 }
 
@@ -211,9 +201,11 @@ Some of the features of the SU$^2$ code include, but are not limited to:
 
 \frame{
 \frametitle{Conclusion}
-
-This project examined the theory behind fluid dynamics, as well as numerical simplifications that can be made to optimize the computation. To acquire the visualizations, a Wolfram script along with Wolfram Mathematica was used to parse the data files and create the graphics. The preliminary results in this project are in agreement with the theoretical predictions. SU$^2$ is a viable computational fluid dynamics simulator -- however, only a small set of its capabilities were used in this project. We were able to simulate a von K\'{a}rm\'{a}n vortex street behind a static cylinder using the Navier-Stokes equations, and the Spalart-Allmaras turbulence model. Computational fluid dynamics is now a critical discipline of fluid dynamics, and it is only going to become more indispensable as computations become faster, and the numerical algorithms become further optimized.
-
+\begin{itemize}
+\item The preliminary results in this project are in agreement with the theoretical predictions.
+\item Although only a small set of its capabilities were used in this project, SU$^2$ is a viable computational fluid dynamics simulator.
+\item Computational fluid dynamics is now a critical discipline of fluid dynamics.
+\end{itemize}
 }
 
 \end{document}
